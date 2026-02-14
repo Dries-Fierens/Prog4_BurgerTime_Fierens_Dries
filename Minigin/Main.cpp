@@ -8,7 +8,8 @@
 #include "Minigin.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
-#include "TextObject.h"
+#include "TextComponent.h"
+#include "FPSCounter.h"
 #include "Scene.h"
 
 #include <filesystem>
@@ -19,19 +20,29 @@ static void load()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene();
 
 	auto go = std::make_unique<dae::GameObject>();
-	go->SetTexture("background.png");
+	auto background = std::make_shared<dae::RenderComponent>("background.png", go.get());
+	go->AddComponent(background);
 	scene.Add(std::move(go));
 
 	go = std::make_unique<dae::GameObject>();
-	go->SetTexture("logo.png");
+	auto logoDAE = std::make_shared<dae::RenderComponent>("logo.png", go.get());
+	go->AddComponent(logoDAE);
 	go->SetPosition(358, 180);
 	scene.Add(std::move(go));
 
+	go = std::make_unique<dae::GameObject>();
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_unique<dae::TextObject>("Programming 4 Assignment", font);
-	to->SetColor({ 255, 255, 0, 255 });
-	to->SetPosition(292, 20);
-	scene.Add(std::move(to));
+	auto text = std::make_shared<dae::TextComponent>("Programming 4 Assignment", font, go.get());
+	text->SetColor({ 255, 255, 0, 255 });
+	go->AddComponent(text);
+	go->SetPosition(292, 20);
+	scene.Add(std::move(go));
+
+	go = std::make_unique<dae::GameObject>();
+	auto fpsComponent = std::make_shared<dae::FPSCounter>(font, go.get());
+	go->AddComponent(fpsComponent);
+	go->SetPosition(10, 10);
+	scene.Add(std::move(go));
 }
 
 int main(int, char*[]) {

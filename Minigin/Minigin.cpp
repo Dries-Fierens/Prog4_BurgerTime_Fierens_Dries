@@ -15,6 +15,7 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "Timer.h"
 
 SDL_Window* g_window{};
 
@@ -91,16 +92,29 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 #ifndef __EMSCRIPTEN__
-	while (!m_quit)
-		RunOneFrame();
+	auto& timer = Timer::GetInstance();
+
+	float fixed_time_step = 1000.f / 60.f;
+	float lag = 0.f;
+	timer.SetFixedTimeStep(fixed_time_step);
+
+	while (!m_quit) 
+	{
+		timer.Update();
+		lag += timer.GetDeltaTime();
+
+		m_quit = !InputManager::GetInstance().ProcessInput();
+		while (lag >= fixed_time_step) 
+		{
+			SceneManager::GetInstance().Update();
+			lag -= fixed_time_step;
+		}
+
+		SceneManager::GetInstance().Update();
+		Renderer::GetInstance().Render();
+	}
+
 #else
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
-}
-
-void dae::Minigin::RunOneFrame()
-{
-	m_quit = !InputManager::GetInstance().ProcessInput();
-	SceneManager::GetInstance().Update();
-	Renderer::GetInstance().Render();
 }
