@@ -7,6 +7,8 @@ dae::GameObject::~GameObject() = default;
 
 void dae::GameObject::Update() 
 {
+	UpdateWorldPosition();
+
 	for (const auto& component : m_components)
 	{
 		component->Update();
@@ -21,12 +23,19 @@ void dae::GameObject::Render() const
 	}
 }
 
-glm::vec2 dae::GameObject::GetPosition() const
+glm::vec3 dae::GameObject::GetPosition() const
 {
-	return m_transform.GetPosition();
+	return m_worldPosition;
 }
 
-void dae::GameObject::SetPosition(float x, float y)
+void dae::GameObject::SetLocalPosition(float x, float y)
 {
+	m_positionIsDirty = true;
 	m_transform.SetPosition(x, y, 0.0f);
+}
+
+void dae::GameObject::SetLocalPosition(glm::vec3 position)
+{
+	m_positionIsDirty = true;
+	m_transform.SetPosition(position);
 }

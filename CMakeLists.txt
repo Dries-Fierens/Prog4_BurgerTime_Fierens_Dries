@@ -27,7 +27,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Minigin/TextComponent.cpp"
   Minigin/Texture2D.cpp
   Minigin/Transform.cpp
- "Minigin/Timer.h" "Minigin/Timer.cpp" "Minigin/BaseComponent.h"  "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp"   "Minigin/FPSCounter.h" "Minigin/FPSCounter.cpp")
+ "Minigin/Timer.h" "Minigin/Timer.cpp" "Minigin/BaseComponent.h"  "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp"   "Minigin/FPSCounter.h" "Minigin/FPSCounter.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp")
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
