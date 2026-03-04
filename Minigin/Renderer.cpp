@@ -39,6 +39,8 @@ void dae::Renderer::Init(SDL_Window* window)
 
 	ImGui_ImplSDL3_InitForSDLRenderer(window, m_renderer);
 	ImGui_ImplSDLRenderer3_Init(m_renderer);
+
+	graphPlot = std::make_unique<GraphPlot>();
 }
 
 void dae::Renderer::Render() const
@@ -46,6 +48,9 @@ void dae::Renderer::Render() const
 	ImGui_ImplSDLRenderer3_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
+
+	graphPlot->PlotIntegers();
+	graphPlot->PlotGameObject3D();
 
 	ImGui::Render();
 
