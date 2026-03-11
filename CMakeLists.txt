@@ -27,7 +27,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Minigin/TextComponent.cpp"
   Minigin/Texture2D.cpp
   Minigin/Transform.cpp
- "Minigin/Timer.h" "Minigin/Timer.cpp" "Minigin/BaseComponent.h"  "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp"   "Minigin/FPSCounter.h" "Minigin/FPSCounter.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp" "Minigin/GraphPlot.h" "Minigin/GraphPlot.cpp")
+ "Minigin/Timer.h" "Minigin/Timer.cpp" "Minigin/BaseComponent.h"  "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp"   "Minigin/FPSCounter.h" "Minigin/FPSCounter.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp" "Minigin/GraphPlot.h" "Minigin/GraphPlot.cpp" "Minigin/Command.h" "Minigin/Controller.h" "Minigin/Controller.cpp" "Minigin/MoveCommand.h" "Minigin/MoveCommand.cpp")
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
@@ -152,6 +152,7 @@ target_link_libraries("${TARGET_NAME}" PUBLIC
   SDL3_ttf::SDL3_ttf
   imgui
   ${VLD_LIBRARIES}
+  Xinput.lib
 )
 
 if(MSVC)

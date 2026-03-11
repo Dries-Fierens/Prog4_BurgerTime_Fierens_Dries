@@ -12,6 +12,8 @@
 #include "RotatorComponent.h"
 #include "FPSCounter.h"
 #include "Scene.h"
+#include "InputManager.h"
+#include "MoveCommand.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -52,17 +54,27 @@ static void load()
 
 	auto pacmanObject1 = std::make_unique<dae::GameObject>(basePtr);
 	auto pacmanRender1 = std::make_shared<dae::RenderComponent>("icon.png", pacmanObject1.get());
-	auto rotator1 = std::make_shared<dae::RotatorComponent>(700.f, 90.f, 10.f, pacmanObject1.get());
+	//auto rotator1 = std::make_shared<dae::RotatorComponent>(700.f, 90.f, 10.f, pacmanObject1.get());
 	pacmanObject1->AddComponent(pacmanRender1);
-	pacmanObject1->AddComponent(rotator1);
+	//pacmanObject1->AddComponent(rotator1);
+
 	auto* pacman1Ptr = pacmanObject1.get();
+	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<MoveCommand>(pacman1Ptr, -200.f, true), 'a', dae::InputManager::InputType::OnPressed);
+	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<MoveCommand>(pacman1Ptr, 200.f, true), 'd', dae::InputManager::InputType::OnPressed);
+	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<MoveCommand>(pacman1Ptr, -200.f, false), 'w', dae::InputManager::InputType::OnPressed);
+	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<MoveCommand>(pacman1Ptr, 200.f, false), 's', dae::InputManager::InputType::OnPressed);
 	scene.Add(std::move(pacmanObject1));
 
 	auto pacmanObject2 = std::make_unique<dae::GameObject>(pacman1Ptr);
 	auto pacmanRender2 = std::make_shared<dae::RenderComponent>("icon.png", pacmanObject2.get());
-	auto rotator2 = std::make_shared<dae::RotatorComponent>(350.f, 45.f, 50.f, pacmanObject2.get());
+	//auto rotator2 = std::make_shared<dae::RotatorComponent>(350.f, 45.f, 50.f, pacmanObject2.get());
 	pacmanObject2->AddComponent(pacmanRender2);
-	pacmanObject2->AddComponent(rotator2);
+	//pacmanObject2->AddComponent(rotator2);
+
+	dae::InputManager::GetInstance().AddControllerCommand(std::make_unique<MoveCommand>(pacmanObject2.get(), -400.f, true), dae::Controller::ButtonState::Left, 0, dae::InputManager::InputType::OnPressed);
+	dae::InputManager::GetInstance().AddControllerCommand(std::make_unique<MoveCommand>(pacmanObject2.get(), 400.f, true), dae::Controller::ButtonState::Right, 0, dae::InputManager::InputType::OnPressed);
+	dae::InputManager::GetInstance().AddControllerCommand(std::make_unique<MoveCommand>(pacmanObject2.get(), -400.f, false), dae::Controller::ButtonState::Up, 0, dae::InputManager::InputType::OnPressed);
+	dae::InputManager::GetInstance().AddControllerCommand(std::make_unique<MoveCommand>(pacmanObject2.get(), 400.f, false), dae::Controller::ButtonState::Down, 0, dae::InputManager::InputType::OnPressed);
 	scene.Add(std::move(pacmanObject2));
 }
 
