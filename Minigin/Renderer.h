@@ -28,7 +28,7 @@ namespace dae
 		void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
 
 	private:
-		std::unique_ptr<GraphPlot> graphPlot;
+		//std::unique_ptr<GraphPlot> graphPlot;
 	};
 }
 
