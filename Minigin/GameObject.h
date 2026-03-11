@@ -86,21 +86,46 @@ namespace dae
             return m_parent;
         }
 
-        void SetParent(GameObject* parent)
+        void SetParent(GameObject* parent, bool keepWorldPosition = true)
         {
-            if (parent == this || IsChild(parent)) return;
+            if (parent == this || IsChild(parent) || m_parent == parent) return;
 
-            if (parent == nullptr)
-                SetLocalPosition(GetWorldPosition());
-            else
-                m_positionIsDirty = true;
+            const glm::vec3 worldPosition{ GetWorldPosition() };
 
             if (m_parent) m_parent->RemoveChild(this);
 
             m_parent = parent;
 
             if (m_parent) m_parent->AddChild(this);
+
+            if (keepWorldPosition)
+            {
+                if (m_parent == nullptr)
+                    SetLocalPosition(worldPosition);
+                else
+                    SetLocalPosition(worldPosition - m_parent->GetWorldPosition());
+            }
+            else
+            {
+                m_positionIsDirty = true;
+            }
         }
+
+        //void SetParent(GameObject* parent)
+        //{
+        //    if (parent == this || IsChild(parent)) return;
+
+        //    if (parent == nullptr)
+        //        SetLocalPosition(GetWorldPosition());
+        //    else
+        //        m_positionIsDirty = true;
+
+        //    if (m_parent) m_parent->RemoveChild(this);
+
+        //    m_parent = parent;
+
+        //    if (m_parent) m_parent->AddChild(this);
+        //}
 
         size_t GetChildCount() const
         {

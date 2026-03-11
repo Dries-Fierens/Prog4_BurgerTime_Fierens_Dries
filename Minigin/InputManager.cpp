@@ -22,7 +22,7 @@ bool dae::InputManager::ProcessInput()
 
 					map.second->Execute();
 				}
-				else if (map.first.type == InputType::OnRelease && e.type == SDL_EVENT_KEY_DOWN)
+				else if (map.first.type == InputType::OnRelease && e.type == SDL_EVENT_KEY_UP)
 				{
 					map.second->Execute();
 				}
@@ -42,7 +42,7 @@ bool dae::InputManager::ProcessInput()
 	m_PressedKeys.clear();
 
 	// Process keyboard inputs
-	const auto* state = SDL_GetKeyboardState(nullptr);
+	const bool* state = SDL_GetKeyboardState(nullptr);
 	for (auto& map : m_pKeyboardMap)
 	{
 		const SDL_Scancode scancode = SDL_GetScancodeFromKey(map.first.key, nullptr);
