@@ -3,10 +3,10 @@
 #include "Timer.h"
 
 dae::RotatorComponent::RotatorComponent(float speed, float startAngle, float radius, GameObject* pOwner) : BaseComponent(pOwner),
-m_speed(speed),
+m_position(pOwner->GetPosition()),
 m_angle(startAngle),
-m_radius(radius),
-m_position(pOwner->GetPosition())
+m_speed(speed),
+m_radius(radius)
 {
 }
 

@@ -1,6 +1,8 @@
 #include "Controller.h"
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 #include <windows.h>
 #include <XInput.h>
+#pragma comment(lib, "xinput.lib")
 
 class dae::Controller::ControllerImpl final
 {
@@ -35,6 +37,25 @@ private:
 	WORD m_buttonsReleased;
 	int m_controllerIndex;
 };
+
+#else
+class dae::Controller::ControllerImpl final
+{
+public:
+	ControllerImpl(int)
+	{
+	}
+
+	void Update()
+	{
+	}
+
+	bool IsDown(unsigned int) const { return false; }
+	bool IsUp(unsigned int) const { return false; }
+	bool IsPressed(unsigned int) const { return false; }
+	glm::vec2 GetLeftStickPos() const { return glm::vec2{ 0,0 }; }
+};
+#endif
 
 dae::Controller::Controller(unsigned int controllerIndex)
 	: m_controllerIndex{ controllerIndex }

@@ -14,15 +14,15 @@ namespace dae
 	class GameObject final
 	{
 	public:
-		virtual void Update();
-		virtual void Render() const;
+		void Update();
+		void Render() const;
 
         glm::vec3 GetPosition() const;
 		void SetLocalPosition(float x, float y);
         void SetLocalPosition(glm::vec3 position);
 
 		GameObject() = default;
-		virtual ~GameObject();
+		~GameObject();
         GameObject(GameObject* parent) { SetParent(parent); };
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -44,15 +44,13 @@ namespace dae
         {
             static_assert(std::is_base_of<BaseComponent, ComponentType>::value, "ComponentType must derive from BaseComponent");
 
-            auto it = std::remove_if(m_components.begin(), m_components.end(), [](const std::shared_ptr<BaseComponent>& component)
-                {
-                    return typeid(*component) == typeid(ComponentType);
-                });
-
-            if (it != m_components.end())
-            {
-                m_components.erase(it, m_components.end());
-            }
+            m_components.erase(
+                std::remove_if(m_components.begin(), m_components.end(),
+                    [&component](const std::shared_ptr<BaseComponent>& currentComponent)
+                    {
+                        return currentComponent == component;
+                    }),
+                m_components.end());
         }
 
         template <typename ComponentType>
@@ -62,9 +60,9 @@ namespace dae
 
             for (const auto& component : m_components)
             {
-                if (typeid(*component) == typeid(ComponentType))
+                if (auto castedComponent = std::dynamic_pointer_cast<ComponentType>(component))
                 {
-                    return std::static_pointer_cast<ComponentType>(component);
+                    return castedComponent;
                 }
             }
             return nullptr;
@@ -75,9 +73,10 @@ namespace dae
         {
             static_assert(std::is_base_of<BaseComponent, ComponentType>::value, "ComponentType must derive from BaseComponent");
 
-            return std::any_of(m_components.begin(), m_components.end(), [](const std::shared_ptr<BaseComponent>& component)
+            return std::any_of(m_components.begin(), m_components.end(),
+                [](const std::shared_ptr<BaseComponent>& component)
                 {
-                    return typeid(*component) == typeid(ComponentType);
+                    return std::dynamic_pointer_cast<ComponentType>(component) != nullptr;
                 });
         }
 

@@ -118,3 +118,40 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
 }
+
+void dae::Minigin::RunOneFrame()
+{
+	auto& timer = Timer::GetInstance();
+
+	static bool initialized{};
+	static constexpr float fixedTimeStep{ 1.f / 60.f };
+	static float lag{};
+
+	if (!initialized)
+	{
+		timer.Initialize();
+		timer.SetFixedTimeStep(fixedTimeStep);
+		initialized = true;
+	}
+
+	timer.Update();
+	lag += timer.GetDeltaTime();
+
+	m_quit = !InputManager::GetInstance().ProcessInput();
+
+	while (lag >= fixedTimeStep)
+	{
+		SceneManager::GetInstance().Update();
+		lag -= fixedTimeStep;
+	}
+
+	SceneManager::GetInstance().Update();
+	Renderer::GetInstance().Render();
+
+#ifdef __EMSCRIPTEN__
+	if (m_quit)
+	{
+		emscripten_cancel_main_loop();
+	}
+#endif
+}
