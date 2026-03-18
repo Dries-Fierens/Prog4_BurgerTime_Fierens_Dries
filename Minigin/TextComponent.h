@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "RenderComponent.h"
+#include "SDL3/SDL.h"
 
 namespace dae
 {
@@ -20,7 +21,7 @@ namespace dae
 		void SetColor(const SDL_Color& color);
 
 		TextComponent(const std::string& text, std::shared_ptr<Font> font, GameObject* pOwner);
-		virtual ~TextComponent() = default;
+		~TextComponent() = default;
 		TextComponent(const TextComponent& other) = delete;
 		TextComponent(TextComponent&& other) = delete;
 		TextComponent& operator=(const TextComponent& other) = delete;

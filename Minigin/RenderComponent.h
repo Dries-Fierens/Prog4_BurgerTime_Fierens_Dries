@@ -12,7 +12,7 @@ namespace dae {
 	public:
 		RenderComponent(const std::string& filename, GameObject* pOwner);
 		RenderComponent(std::shared_ptr<Texture2D> texture, GameObject* pOwner);
-		virtual ~RenderComponent() = default;
+		~RenderComponent() = default;
 		RenderComponent(const RenderComponent& other) = delete;
 		RenderComponent(RenderComponent&& other) = delete;
 		RenderComponent& operator=(const RenderComponent& other) = delete;

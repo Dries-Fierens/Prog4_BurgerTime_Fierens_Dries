@@ -6,6 +6,8 @@
 struct Event
 {
 	std::string name{};
+	int playerIndex{ -1 };
+	int value{};
 };
 
 class EventListener
