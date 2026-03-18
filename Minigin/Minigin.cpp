@@ -16,6 +16,12 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "Timer.h"
+#include "EventQueue.h"
+#include <thread>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
 
 SDL_Window* g_window{};
 
@@ -78,6 +84,7 @@ dae::Minigin::Minigin(const std::filesystem::path& dataPath)
 
 	Renderer::GetInstance().Init(g_window);
 	ResourceManager::GetInstance().Init(dataPath);
+	Timer::GetInstance().Initialize();
 }
 
 dae::Minigin::~Minigin()
@@ -95,11 +102,14 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& timer = Timer::GetInstance();
 
 	float fixed_time_step = 1000.f / 60.f;
+	const int ms_per_frame = int(fixed_time_step);
 	float lag = 0.f;
 	timer.SetFixedTimeStep(fixed_time_step);
 
 	while (!m_quit) 
 	{
+		const auto current_time = high_resolution_clock::now();
+
 		timer.Update();
 		lag += timer.GetDeltaTime();
 
@@ -111,7 +121,12 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		}
 
 		SceneManager::GetInstance().Update();
+		EventQueue::GetInstance().NotifyListeners();
 		Renderer::GetInstance().Render();
+
+		const auto sleep_time = current_time + milliseconds(ms_per_frame) - high_resolution_clock::now();
+
+		this_thread::sleep_for(sleep_time);
 	}
 
 #else
@@ -146,6 +161,7 @@ void dae::Minigin::RunOneFrame()
 	}
 
 	SceneManager::GetInstance().Update();
+	EventQueue::GetInstance().NotifyListeners();
 	Renderer::GetInstance().Render();
 
 #ifdef __EMSCRIPTEN__
