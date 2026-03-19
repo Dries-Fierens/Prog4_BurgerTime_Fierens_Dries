@@ -26,28 +26,28 @@ static void load()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene();
 
 	auto go = std::make_unique<dae::GameObject>();
-	auto background = std::make_shared<dae::RenderComponent>("background.png", go.get());
-	go->AddComponent(background);
+	auto background = std::make_unique<dae::RenderComponent>("background.png", go.get());
+	go->AddComponent(std::move(background));
 	scene.Add(std::move(go));
 
 	go = std::make_unique<dae::GameObject>();
-	auto logoDAE = std::make_shared<dae::RenderComponent>("logo.png", go.get());
-	go->AddComponent(logoDAE);
+	auto logoDAE = std::make_unique<dae::RenderComponent>("logo.png", go.get());
+	go->AddComponent(std::move(logoDAE));
 	go->SetLocalPosition(358, 180);
 	scene.Add(std::move(go));
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
 	go = std::make_unique<dae::GameObject>();
-	auto text = std::make_shared<dae::TextComponent>("Programming 4 Assignment", font, go.get());
+	auto text = std::make_unique<dae::TextComponent>("Programming 4 Assignment", font, go.get());
 	text->SetColor({ 255, 255, 0, 255 });
-	go->AddComponent(text);
+	go->AddComponent(std::move(text));
 	go->SetLocalPosition(292, 20);
 	scene.Add(std::move(go));
 
 	go = std::make_unique<dae::GameObject>();
-	auto fpsComponent = std::make_shared<dae::FPSCounter>(font, go.get());
-	go->AddComponent(fpsComponent);
+	auto fpsComponent = std::make_unique<dae::FPSCounter>(font, go.get());
+	go->AddComponent(std::move(fpsComponent));
 	go->SetLocalPosition(10, 10);
 	scene.Add(std::move(go));
 

@@ -29,38 +29,38 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-        template <typename ComponentType, typename... Args>
-        std::shared_ptr<ComponentType> AddComponent(std::shared_ptr<ComponentType> component)
+        template <typename ComponentType>
+        ComponentType* AddComponent(std::unique_ptr<ComponentType> component)
         {
             static_assert(std::is_base_of<BaseComponent, ComponentType>::value, "ComponentType must derive from BaseComponent");
 
-            m_components.emplace_back(component);
-
-            return component;
+            ComponentType* pComponent = component.get();
+            m_components.emplace_back(std::move(component));
+            return pComponent;
         }
 
         template <typename ComponentType>
-        void RemoveComponent(std::shared_ptr<ComponentType> component)
+        void RemoveComponent(ComponentType* component)
         {
             static_assert(std::is_base_of<BaseComponent, ComponentType>::value, "ComponentType must derive from BaseComponent");
 
             m_components.erase(
                 std::remove_if(m_components.begin(), m_components.end(),
-                    [&component](const std::shared_ptr<BaseComponent>& currentComponent)
+                    [component](const std::unique_ptr<BaseComponent>& currentComponent)
                     {
-                        return currentComponent == component;
+                        return currentComponent.get() == component;
                     }),
                 m_components.end());
         }
 
         template <typename ComponentType>
-        std::shared_ptr<ComponentType> GetComponent() const
+        ComponentType* GetComponent() const
         {
             static_assert(std::is_base_of<BaseComponent, ComponentType>::value, "ComponentType must derive from BaseComponent");
 
             for (const auto& component : m_components)
             {
-                if (auto castedComponent = std::dynamic_pointer_cast<ComponentType>(component))
+                if (auto castedComponent = dynamic_cast<ComponentType*>(component.get()))
                 {
                     return castedComponent;
                 }
@@ -73,11 +73,7 @@ namespace dae
         {
             static_assert(std::is_base_of<BaseComponent, ComponentType>::value, "ComponentType must derive from BaseComponent");
 
-            return std::any_of(m_components.begin(), m_components.end(),
-                [](const std::shared_ptr<BaseComponent>& component)
-                {
-                    return std::dynamic_pointer_cast<ComponentType>(component) != nullptr;
-                });
+            return GetComponent<ComponentType>() != nullptr;
         }
 
         GameObject* GetParent() const
@@ -220,7 +216,7 @@ namespace dae
         }
 
         Transform m_transform{};
-        std::vector<std::shared_ptr<BaseComponent>> m_components;
+        std::vector<std::unique_ptr<BaseComponent>> m_components;
         GameObject* m_parent{ nullptr };
         std::vector<GameObject*> m_children;
         glm::vec3 m_worldPosition{};

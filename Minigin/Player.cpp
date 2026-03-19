@@ -22,8 +22,8 @@ void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
 	auto* playerPtr = playerObject.get();
 
 	playerObject->SetLocalPosition(x, y);
-	playerObject->AddComponent(std::make_shared<dae::RenderComponent>("icon.png", playerPtr));
-	playerObject->AddComponent(std::make_shared<dae::PlayerComponent>(playerIndex, StartingLives, playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::RenderComponent>("icon.png", playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(playerIndex, StartingLives, playerPtr));
 
 	auto& input = dae::InputManager::GetInstance();
 	input.AddKeyboardCommand(std::make_unique<MoveCommand>(playerPtr, -PlayerMoveSpeed, true), left, dae::InputManager::InputType::OnPressed);
@@ -41,14 +41,14 @@ void Player::CreateUI(dae::Scene& scene, const std::shared_ptr<dae::Font>& font,
 	int playerIndex, float x, float y)
 {
 	auto livesObject = std::make_unique<dae::GameObject>();
-	auto livesDisplay = std::make_shared<dae::LivesDisplayComponent>(playerIndex, StartingLives, font, livesObject.get());
-	livesObject->AddComponent(livesDisplay);
+	auto livesDisplay = std::make_unique<dae::LivesDisplayComponent>(playerIndex, StartingLives, font, livesObject.get());
+	livesObject->AddComponent(std::move(livesDisplay));
 	livesObject->SetLocalPosition(x, y);
 	scene.Add(std::move(livesObject));
 
 	auto scoreObject = std::make_unique<dae::GameObject>();
-	auto scoreDisplay = std::make_shared<dae::ScoreDisplayComponent>(playerIndex, 0, font, scoreObject.get());
-	scoreObject->AddComponent(scoreDisplay);
+	auto scoreDisplay = std::make_unique<dae::ScoreDisplayComponent>(playerIndex, 0, font, scoreObject.get());
+	scoreObject->AddComponent(std::move(scoreDisplay));
 	scoreObject->SetLocalPosition(x, y + 36.f);
 	scene.Add(std::move(scoreObject));
 }
