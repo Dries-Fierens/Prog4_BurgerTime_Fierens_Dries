@@ -3,7 +3,6 @@
 #include "Timer.h"
 
 dae::RotatorComponent::RotatorComponent(float speed, float startAngle, float radius, GameObject* pOwner) : BaseComponent(pOwner),
-m_position(pOwner->GetPosition()),
 m_angle(startAngle),
 m_speed(speed),
 m_radius(radius)
@@ -20,8 +19,8 @@ void dae::RotatorComponent::Update()
     float cosAngle = cos(radians);
     float sinAngle = sin(radians);
 
-    float newX = m_position.x + m_radius * cosAngle;
-    float newY = m_position.y + m_radius * sinAngle;
+    float newX = GetOwner()->GetPosition().x + m_radius * cosAngle;
+    float newY = GetOwner()->GetPosition().y + m_radius * sinAngle;
 
     GetOwner()->SetLocalPosition(newX, newY);
 }

@@ -31,7 +31,7 @@ glm::vec3 dae::GameObject::GetPosition() const
 void dae::GameObject::SetLocalPosition(float x, float y)
 {
 	m_positionIsDirty = true;
-	m_transform.SetPosition(x, y, 0.0f);
+	m_transform.SetPosition(x, y, 0.f);
 }
 
 void dae::GameObject::SetLocalPosition(glm::vec3 position)
