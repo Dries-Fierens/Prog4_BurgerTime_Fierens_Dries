@@ -11,6 +11,9 @@ public:
 		SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down,
 		SDL_Keycode dieKey, SDL_Keycode scoreKey);
 
-	static void CreateUI(dae::Scene& scene, const std::shared_ptr<dae::Font>& font, 
+	static void Create(dae::Scene& scene, int playerIndex, float x, float y,
+		unsigned int controllerIndex);
+
+	static void CreateUI(dae::Scene& scene, const std::shared_ptr<dae::Font>& font,
 		int playerIndex, float x, float y);
 };

@@ -9,6 +9,7 @@ namespace dae
 	public:
 		explicit Controller(unsigned int controllerIndex);
 		~Controller();
+
 		Controller(const Controller& other) = delete;
 		Controller& operator=(const Controller& rhs) = delete;
 		Controller(Controller&& other) = delete;
@@ -16,7 +17,7 @@ namespace dae
 
 		void Update();
 
-		unsigned int GetIndex() const { return m_controllerIndex; }
+		unsigned int GetIndex() const;
 		glm::vec2 GetLeftStickPos() const;
 
 		enum class ButtonState
@@ -45,6 +46,5 @@ namespace dae
 	private:
 		class ControllerImpl;
 		std::unique_ptr<ControllerImpl> m_pImpl{};
-		unsigned int m_controllerIndex{};
 	};
 }

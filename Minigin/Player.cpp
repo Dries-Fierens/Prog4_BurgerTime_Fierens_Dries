@@ -37,7 +37,35 @@ void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
 	scene.Add(std::move(playerObject));
 }
 
-void Player::CreateUI(dae::Scene& scene, const std::shared_ptr<dae::Font>& font, 
+void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
+	unsigned int controllerIndex)
+{
+	auto playerObject = std::make_unique<dae::GameObject>();
+	auto* playerPtr = playerObject.get();
+
+	playerObject->SetLocalPosition(x, y);
+	playerObject->AddComponent(std::make_unique<dae::RenderComponent>("icon.png", playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(playerIndex, StartingLives, playerPtr));
+
+	auto& input = dae::InputManager::GetInstance();
+	input.AddControllerCommand(std::make_unique<MoveCommand>(playerPtr, -PlayerMoveSpeed, true),
+		dae::Controller::ButtonState::Left, controllerIndex, dae::InputManager::InputType::OnPressed);
+	input.AddControllerCommand(std::make_unique<MoveCommand>(playerPtr, PlayerMoveSpeed, true),
+		dae::Controller::ButtonState::Right, controllerIndex, dae::InputManager::InputType::OnPressed);
+	input.AddControllerCommand(std::make_unique<MoveCommand>(playerPtr, -PlayerMoveSpeed, false),
+		dae::Controller::ButtonState::Up, controllerIndex, dae::InputManager::InputType::OnPressed);
+	input.AddControllerCommand(std::make_unique<MoveCommand>(playerPtr, PlayerMoveSpeed, false),
+		dae::Controller::ButtonState::Down, controllerIndex, dae::InputManager::InputType::OnPressed);
+
+	input.AddControllerCommand(std::make_unique<DeathCommand>(playerPtr),
+		dae::Controller::ButtonState::A, controllerIndex, dae::InputManager::InputType::OnDown);
+	input.AddControllerCommand(std::make_unique<AddScoreCommand>(playerPtr, ScorePerPickup),
+		dae::Controller::ButtonState::B, controllerIndex, dae::InputManager::InputType::OnDown);
+
+	scene.Add(std::move(playerObject));
+}
+
+void Player::CreateUI(dae::Scene& scene, const std::shared_ptr<dae::Font>& font,
 	int playerIndex, float x, float y)
 {
 	auto livesObject = std::make_unique<dae::GameObject>();

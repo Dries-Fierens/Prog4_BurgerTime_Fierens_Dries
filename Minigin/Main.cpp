@@ -56,7 +56,7 @@ static void load()
 	Player::CreateUI(scene, font, 2, 720.f, 60.f);
 
 	Player::Create(scene, 1, 280.f, 280.f, 'a', 'd', 'w', 's', 'q', 'e');
-	Player::Create(scene, 2, 640.f, 280.f, 'j', 'l', 'i', 'k', 'u', 'o');
+	Player::Create(scene, 2, 640.f, 280.f, 0);
 }
 
 int main(int, char* [])

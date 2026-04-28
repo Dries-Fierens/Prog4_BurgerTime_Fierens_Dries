@@ -1,4 +1,5 @@
 #include "Controller.h"
+
 #if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 #include <windows.h>
 #include <XInput.h>
@@ -7,8 +8,10 @@
 class dae::Controller::ControllerImpl final
 {
 public:
-	ControllerImpl(int controllerIndex)
-		: m_buttonsPressed{}, m_buttonsReleased{}, m_controllerIndex{ controllerIndex }
+	explicit ControllerImpl(unsigned int controllerIndex)
+		: m_buttonsPressed{}
+		, m_buttonsReleased{}
+		, m_controllerIndex{ controllerIndex }
 	{
 		ZeroMemory(&m_prevState, sizeof(XINPUT_STATE));
 		ZeroMemory(&m_currState, sizeof(XINPUT_STATE));
@@ -20,29 +23,51 @@ public:
 		ZeroMemory(&m_currState, sizeof(XINPUT_STATE));
 		XInputGetState(m_controllerIndex, &m_currState);
 
-		auto buttonChanges = m_currState.Gamepad.wButtons ^ m_prevState.Gamepad.wButtons;
+		const auto buttonChanges = m_currState.Gamepad.wButtons ^ m_prevState.Gamepad.wButtons;
 		m_buttonsPressed = buttonChanges & m_currState.Gamepad.wButtons;
 		m_buttonsReleased = buttonChanges & (~m_currState.Gamepad.wButtons);
 	}
 
-	bool IsDown(unsigned int button) const { return m_buttonsPressed & button; }
-	bool IsUp(unsigned int button) const { return m_buttonsReleased & button; }
-	bool IsPressed(unsigned int button) const { return m_currState.Gamepad.wButtons & button; }
-	glm::vec2 GetLeftStickPos() const { return glm::vec2{ m_currState.Gamepad.sThumbLX, m_currState.Gamepad.sThumbLY }; }
+	bool IsDown(unsigned int button) const
+	{
+		return (m_buttonsPressed & button) != 0;
+	}
+
+	bool IsUp(unsigned int button) const
+	{
+		return (m_buttonsReleased & button) != 0;
+	}
+
+	bool IsPressed(unsigned int button) const
+	{
+		return (m_currState.Gamepad.wButtons & button) != 0;
+	}
+
+	glm::vec2 GetLeftStickPos() const
+	{
+		return glm::vec2{ m_currState.Gamepad.sThumbLX, m_currState.Gamepad.sThumbLY };
+	}
+
+	unsigned int GetIndex() const
+	{
+		return m_controllerIndex;
+	}
 
 private:
 	XINPUT_STATE m_prevState{};
 	XINPUT_STATE m_currState{};
-	WORD m_buttonsPressed;
-	WORD m_buttonsReleased;
-	int m_controllerIndex;
+	WORD m_buttonsPressed{};
+	WORD m_buttonsReleased{};
+	unsigned int m_controllerIndex{};
 };
 
 #else
+
 class dae::Controller::ControllerImpl final
 {
 public:
-	ControllerImpl(int)
+	explicit ControllerImpl(unsigned int controllerIndex)
+		: m_controllerIndex{ controllerIndex }
 	{
 	}
 
@@ -50,26 +75,52 @@ public:
 	{
 	}
 
-	bool IsDown(unsigned int) const { return false; }
-	bool IsUp(unsigned int) const { return false; }
-	bool IsPressed(unsigned int) const { return false; }
-	glm::vec2 GetLeftStickPos() const { return glm::vec2{ 0,0 }; }
+	bool IsDown(unsigned int) const
+	{
+		return false;
+	}
+
+	bool IsUp(unsigned int) const
+	{
+		return false;
+	}
+
+	bool IsPressed(unsigned int) const
+	{
+		return false;
+	}
+
+	glm::vec2 GetLeftStickPos() const
+	{
+		return glm::vec2{ 0.f, 0.f };
+	}
+
+	unsigned int GetIndex() const
+	{
+		return m_controllerIndex;
+	}
+
+private:
+	unsigned int m_controllerIndex{};
 };
+
 #endif
 
 dae::Controller::Controller(unsigned int controllerIndex)
-	: m_controllerIndex{ controllerIndex }
+	: m_pImpl{ std::make_unique<ControllerImpl>(controllerIndex) }
 {
-	m_pImpl = std::make_unique<ControllerImpl>(controllerIndex);
 }
 
-dae::Controller::~Controller()
-{
-}
+dae::Controller::~Controller() = default;
 
 void dae::Controller::Update()
 {
 	m_pImpl->Update();
+}
+
+unsigned int dae::Controller::GetIndex() const
+{
+	return m_pImpl->GetIndex();
 }
 
 bool dae::Controller::IsDown(ButtonState button) const
