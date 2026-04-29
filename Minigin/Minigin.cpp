@@ -19,6 +19,7 @@
 #include "EventQueue.h"
 #include <thread>
 #include <chrono>
+#include "Locator.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -85,10 +86,12 @@ dae::Minigin::Minigin(const std::filesystem::path& dataPath)
 	Renderer::GetInstance().Init(g_window);
 	ResourceManager::GetInstance().Init(dataPath);
 	Timer::GetInstance().Initialize();
+	Locator::Initialize();
 }
 
 dae::Minigin::~Minigin()
 {
+	Locator::Shutdown();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;

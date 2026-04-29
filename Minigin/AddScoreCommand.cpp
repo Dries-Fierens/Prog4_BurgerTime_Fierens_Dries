@@ -1,8 +1,11 @@
 #include "AddScoreCommand.h"
 #include "PlayerComponent.h"
+#include "Locator.h"
 
 void AddScoreCommand::Execute()
 {
+	//Locator::GetAudio()->PlaySound("Bonus Obtained.wav", 100, 0);
+
 	if (!m_pGameObject)
 	{
 		return;

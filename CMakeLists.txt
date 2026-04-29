@@ -27,7 +27,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Minigin/TextComponent.cpp"
   Minigin/Texture2D.cpp
   Minigin/Transform.cpp
- "Minigin/Timer.h" "Minigin/Timer.cpp" "Minigin/BaseComponent.h"  "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp"   "Minigin/FPSCounter.h" "Minigin/FPSCounter.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp" "Minigin/GraphPlot.h" "Minigin/GraphPlot.cpp" "Minigin/Command.h" "Minigin/Controller.h" "Minigin/Controller.cpp" "Minigin/MoveCommand.h" "Minigin/MoveCommand.cpp" "Minigin/EventQueue.h" "Minigin/EventQueue.cpp" "Minigin/DeathCommand.h" "Minigin/DeathCommand.cpp" "Minigin/PlayerComponent.h" "Minigin/PlayerComponent.cpp" "Minigin/LivesDisplayComponent.h" "Minigin/LivesDisplayComponent.cpp" "Minigin/ScoreDisplayComponent.h" "Minigin/ScoreDisplayComponent.cpp" "Minigin/AddScoreCommand.h" "Minigin/AddScoreCommand.cpp" "Minigin/Player.h" "Minigin/Player.cpp")
+ "Minigin/Timer.h" "Minigin/Timer.cpp" "Minigin/BaseComponent.h"  "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp"   "Minigin/FPSCounter.h" "Minigin/FPSCounter.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp" "Minigin/GraphPlot.h" "Minigin/GraphPlot.cpp" "Minigin/Command.h" "Minigin/Controller.h" "Minigin/Controller.cpp" "Minigin/MoveCommand.h" "Minigin/MoveCommand.cpp" "Minigin/EventQueue.h" "Minigin/EventQueue.cpp" "Minigin/DeathCommand.h" "Minigin/DeathCommand.cpp" "Minigin/PlayerComponent.h" "Minigin/PlayerComponent.cpp" "Minigin/LivesDisplayComponent.h" "Minigin/LivesDisplayComponent.cpp" "Minigin/ScoreDisplayComponent.h" "Minigin/ScoreDisplayComponent.cpp" "Minigin/AddScoreCommand.h" "Minigin/AddScoreCommand.cpp" "Minigin/Player.h" "Minigin/Player.cpp" "Minigin/Audio.h" "Minigin/NullAudio.h" "Minigin/ConsoleAudio.h" "Minigin/ConsoleAudio.cpp" "Minigin/Locator.h" "Minigin/Locator.cpp")
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
@@ -104,6 +104,31 @@ if(NOT SDL3_ttf_FOUND)
   endif()
 endif()
 
+# Add SDL3_mixer
+find_package(SDL3_mixer 3.2.0 CONFIG QUIET)
+if(NOT SDL3_mixer_FOUND)
+  if (WIN32)
+    FetchContent_Declare(
+      SDL3_mixer
+      URL https://github.com/libsdl-org/SDL_mixer/releases/download/release-3.2.0/SDL3_mixer-devel-3.2.0-VC.zip
+      DOWNLOAD_NO_PROGRESS ON
+      DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/downloads
+    )
+    FetchContent_MakeAvailable(SDL3_mixer)
+    list(PREPEND CMAKE_PREFIX_PATH "${sdl3_mixer_SOURCE_DIR}")
+    find_package(SDL3_mixer CONFIG REQUIRED)
+  else()
+    FetchContent_Declare(
+      SDL3_mixer
+      GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
+      GIT_TAG release-3.2.0
+      GIT_SHALLOW TRUE
+      GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(SDL3_mixer)
+  endif()
+endif()
+
 # Dear ImGui
 FetchContent_Declare(
   imgui
@@ -142,6 +167,7 @@ target_include_directories("${TARGET_NAME}" PUBLIC
   ${sdl3_SOURCE_DIR}/include
   ${sdl3_image_SOURCE_DIR}/include
   ${sdl3_ttf_SOURCE_DIR}/include
+  ${sdl3_mixer_SOURCE_DIR}/include
   ${imgui_SOURCE_DIR}
   ${VLD_INCLUDE_DIR}
 )
@@ -149,6 +175,7 @@ target_include_directories("${TARGET_NAME}" PUBLIC
 target_link_libraries("${TARGET_NAME}" PUBLIC 
   SDL3::SDL3 
   SDL3_ttf::SDL3_ttf
+  SDL3_mixer::SDL3_mixer
   imgui
   ${VLD_LIBRARIES}
 )
@@ -194,6 +221,7 @@ elseif(WIN32)
   set(SDL_RUNTIME_DLLS
     SDL3::SDL3
     SDL3_ttf::SDL3_ttf
+    SDL3_mixer::SDL3_mixer
   )
 
   foreach(dllTarget IN LISTS SDL_RUNTIME_DLLS)
