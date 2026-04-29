@@ -154,7 +154,7 @@ public:
 
 			if (playOptions != 0)
 			{
-				SDL_DestroyProperties(playOptions);
+				SDL_DestroyProperties(playOptions); 
 			}
 		}
 	}
