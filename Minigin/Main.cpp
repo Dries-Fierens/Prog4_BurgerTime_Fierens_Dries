@@ -15,6 +15,7 @@
 #include "SceneManager.h"
 #include "TextComponent.h"
 #include "Player.h"
+#include "Locator.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -57,6 +58,9 @@ static void load()
 
 	Player::Create(scene, 1, 280.f, 280.f, 'a', 'd', 'w', 's', 'q', 'e');
 	Player::Create(scene, 2, 640.f, 280.f, 0);
+
+	Locator::GetAudio()->PlayMusic("BGM.wav", 40, -1);
+	Locator::GetAudio()->PauseMusic(false);
 }
 
 int main(int, char* [])

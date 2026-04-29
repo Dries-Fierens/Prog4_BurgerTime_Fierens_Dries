@@ -4,7 +4,7 @@
 
 void DeathCommand::Execute()
 {
-	//Locator::GetAudio()->PlaySound("Death.wav", 100, 0);
+	Locator::GetAudio()->PlaySound("Death.wav", 30, 0);
 
 	if (!m_pGameObject)
 	{
