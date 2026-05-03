@@ -5,7 +5,7 @@
 
 dae::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update() 
+void dae::GameObject::Update()
 {
 	UpdateWorldPosition();
 
@@ -25,6 +25,12 @@ void dae::GameObject::Render() const
 
 glm::vec3 dae::GameObject::GetPosition() const
 {
+	// prevent collider from checking the old pos
+	if (m_positionIsDirty)
+	{
+		const_cast<GameObject*>(this)->UpdateWorldPosition();
+	}
+
 	return m_worldPosition;
 }
 

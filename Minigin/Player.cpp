@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "PlayerComponent.h"
 #include "RenderComponent.h"
+#include "ColliderComponent.h"
 #include "MoveCommand.h"
 #include "DeathCommand.h"
 #include "AddScoreCommand.h"
@@ -13,6 +14,8 @@
 constexpr int StartingLives{ 3 };
 constexpr int ScorePerPickup{ 100 };
 constexpr float PlayerMoveSpeed{ 200.f };
+constexpr float PlayerColliderWidth{ 32.f };
+constexpr float PlayerColliderHeight{ 32.f };
 
 void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
 	SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down,
@@ -24,6 +27,7 @@ void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
 	playerObject->SetLocalPosition(x, y);
 	playerObject->AddComponent(std::make_unique<dae::RenderComponent>("icon.png", playerPtr));
 	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(playerIndex, StartingLives, playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::ColliderComponent>(PlayerColliderWidth, PlayerColliderHeight, playerPtr));
 
 	auto& input = dae::InputManager::GetInstance();
 	input.AddKeyboardCommand(std::make_unique<MoveCommand>(playerPtr, -PlayerMoveSpeed, true), left, dae::InputManager::InputType::OnPressed);
@@ -37,7 +41,7 @@ void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
 	scene.Add(std::move(playerObject));
 }
 
-void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
+void Player::Create(dae::Scene& scene, int playerIndex, float x, float y, 
 	unsigned int controllerIndex)
 {
 	auto playerObject = std::make_unique<dae::GameObject>();
@@ -46,6 +50,7 @@ void Player::Create(dae::Scene& scene, int playerIndex, float x, float y,
 	playerObject->SetLocalPosition(x, y);
 	playerObject->AddComponent(std::make_unique<dae::RenderComponent>("icon.png", playerPtr));
 	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(playerIndex, StartingLives, playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::ColliderComponent>(PlayerColliderWidth, PlayerColliderHeight, playerPtr));
 
 	auto& input = dae::InputManager::GetInstance();
 	input.AddControllerCommand(std::make_unique<MoveCommand>(playerPtr, -PlayerMoveSpeed, true),
