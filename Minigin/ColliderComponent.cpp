@@ -5,9 +5,9 @@
 std::vector<dae::ColliderComponent*> dae::ColliderComponent::m_colliders{};
 
 dae::ColliderComponent::ColliderComponent(float width, float height, GameObject* pOwner)
-	: m_width(width)
+	: BaseComponent(pOwner)
+	, m_width(width)
 	, m_height(height)
-	, BaseComponent(pOwner)
 {
 	m_colliders.emplace_back(this);
 }

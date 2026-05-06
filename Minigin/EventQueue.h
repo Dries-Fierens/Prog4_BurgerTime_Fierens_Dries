@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include <queue>
 #include <string>
+#include <vector>
 
 struct Event
 {
@@ -41,8 +42,10 @@ namespace dae
 
 	private:
 		std::queue<Event> m_eventQueue{};
-		std::vector<EventListener*> m_listeners;
+		std::vector<EventListener*> m_listeners{};
+		bool m_isNotifying{ false };
 
 		bool PollEvent(Event& e);
+		void CompactListeners(); 
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "EventQueue.h"
 #include "Singleton.h"
+#include <vector>
 
 class GameManager final : public dae::Singleton<GameManager>, public EventListener
 {
@@ -23,16 +24,20 @@ public:
 	void OnEvent(const Event& e) override;
 
 	void Initialize();
-	void SkipLevel();
-	void SetGameState(GameState state) { m_gameState = state; }
+	void SetLevel();
+	void SetGameState(GameState state);
 	GameState GetGameState() const { return m_gameState; }
 	int GetCurrentLevel() const { return m_currentLevel; }
+	const std::vector<int>& GetPlayerScores() const { return m_playerScores; }
 
 private:
 	friend class Singleton<GameManager>;
 	GameManager() = default;
 
+	void SetPlayerScore(int playerIndex, int score);
+
 	GameState m_gameState{ GameState::Menu };
 	int m_currentLevel{};
 	int m_totalLevels{ 3 };
+	std::vector<int> m_playerScores{};
 };

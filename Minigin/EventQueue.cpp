@@ -1,4 +1,5 @@
 #include "EventQueue.h"
+#include <algorithm>
 
 int EventListener::m_idCounter{ 0 };
 
@@ -15,14 +16,22 @@ void dae::EventQueue::SendEvent(const Event& event)
 
 void dae::EventQueue::NotifyListeners()
 {
+	m_isNotifying = true;
+
 	Event e{};
 	while (PollEvent(e))
 	{
-		for (auto listener : m_listeners)
+		for (auto*& listener : m_listeners)
 		{
-			listener->OnEvent(e);
+			if (listener)
+			{
+				listener->OnEvent(e);
+			}
 		}
 	}
+
+	m_isNotifying = false;
+	CompactListeners();
 }
 
 void dae::EventQueue::AddListener(EventListener* listener)
@@ -32,17 +41,23 @@ void dae::EventQueue::AddListener(EventListener* listener)
 
 void dae::EventQueue::RemoveListener(int listenerId)
 {
-	std::vector<EventListener*> newListeners;
-
-	for (auto* listener : m_listeners)
+	for (auto*& listener : m_listeners)
 	{
-		if (listener && listener->GetId() != listenerId)
+		if (listener && listener->GetId() == listenerId)
 		{
-			newListeners.push_back(listener);
+			listener = nullptr;
 		}
 	}
 
-	m_listeners = newListeners;
+	if (!m_isNotifying)
+	{
+		CompactListeners();
+	}
+}
+
+void dae::EventQueue::CompactListeners()
+{
+	std::erase(m_listeners, nullptr);
 }
 
 bool dae::EventQueue::PollEvent(Event& e)

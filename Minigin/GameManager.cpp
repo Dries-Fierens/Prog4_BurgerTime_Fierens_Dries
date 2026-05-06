@@ -7,30 +7,37 @@
 #include "Level.h"
 #include "Locator.h"
 #include "Audio.h"
+#include "HighScoreScene.h"
 
 void GameManager::OnEvent(const Event& e)
 {
-	//auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+	if (e.name == "ScoreChanged")
+	{
+		SetPlayerScore(e.playerIndex, e.value);
+		return;
+	}
 
 	if (e.name == "NextLevel")
 	{
 		bool goNextLevel = true;
+
+		// Example for next level condition
 		//for (const auto& go : currentScene->GetGameObjects())
 		//{
-		//	bool burgerComplete = go->HasComponent<dae::BurgerComponent>() && go->GetComponent<dae::BurgerComponent>()->IsComplete();
-		//	goNextLevel = burgerComplete;
+		//	bool burgersComplete = go->HasComponent<dae::BurgerComponent>() && go->GetComponent<dae::BurgerComponent>()->IsComplete();
+		//	goNextLevel = burgersComplete;
 		//	break;
 		//}
 
-		if (goNextLevel) SkipLevel();
+		if (goNextLevel) SetLevel();
 	}
 
-	if (e.name == "PlayerDead")
+	if (e.name == "PlayerDied" && e.value <= 0)
 	{
 		Locator::Shutdown();
 		Locator::Initialize();
-		MainMenu::Create();
-		m_gameState = GameState::Menu;
+		HighScoreScene::Create();
+		m_gameState = GameState::HighScore;
 	}
 }
 
@@ -41,7 +48,41 @@ void GameManager::Initialize()
 	dae::EventQueue::GetInstance().AddListener(this);
 }
 
-void GameManager::SkipLevel()
+void GameManager::SetGameState(GameState state)
+{
+	m_gameState = state;
+	m_currentLevel = 1;
+
+	switch (state)
+	{
+	case GameState::Singleplayer:
+		m_playerScores.assign(1, 0);
+		break;
+	case GameState::Coop:
+	case GameState::Versus:
+		m_playerScores.assign(2, 0);
+		break;
+	default:
+		break;
+	}
+}
+
+void GameManager::SetPlayerScore(int playerIndex, int score)
+{
+	if (playerIndex <= 0)
+	{
+		return;
+	}
+
+	if (m_playerScores.size() < static_cast<size_t>(playerIndex))
+	{
+		m_playerScores.resize(static_cast<size_t>(playerIndex), 0);
+	}
+
+	m_playerScores[static_cast<size_t>(playerIndex) - 1] = score;
+}
+
+void GameManager::SetLevel()
 {
 	if (m_gameState == GameState::Singleplayer ||
 		m_gameState == GameState::Coop ||
@@ -72,11 +113,8 @@ void GameManager::SkipLevel()
 			}
 			else
 			{
-				// create high score scene
-				//m_gameState = GameState::HighScore;
-
-				MainMenu::Create();
-				m_gameState = GameState::Menu;
+				HighScoreScene::Create();
+				m_gameState = GameState::HighScore;
 			}
 		}
 	}
