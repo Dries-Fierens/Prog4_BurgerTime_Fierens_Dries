@@ -3,5 +3,5 @@
 class HighScoreScene final
 {
 public:
-	static void Create();
+	static void Create(); 
 };
