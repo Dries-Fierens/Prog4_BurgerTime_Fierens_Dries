@@ -55,4 +55,8 @@ void dae::TextComponent::SetColor(const SDL_Color& color)
 	m_needsUpdate = true; 
 }
 
+glm::vec2 dae::TextComponent::GetSize() const
+{
+	return m_renderComponent.get()->GetSize();
+}
 

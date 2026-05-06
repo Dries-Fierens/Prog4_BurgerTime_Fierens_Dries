@@ -19,6 +19,7 @@ namespace dae
 		void SetText(const std::string& text);
 		void SetPosition(float x, float y);
 		void SetColor(const SDL_Color& color);
+		glm::vec2 GetSize() const;
 
 		TextComponent(const std::string& text, std::shared_ptr<Font> font, GameObject* pOwner);
 		~TextComponent() = default;

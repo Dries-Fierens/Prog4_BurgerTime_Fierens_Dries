@@ -3,6 +3,8 @@
 
 using namespace dae;
 
+Scene::Scene(const std::string& name) : m_name(name) {}
+
 void Scene::Add(std::unique_ptr<GameObject> object)
 {
 	assert(object != nullptr && "Cannot add a null GameObject to the scene.");
@@ -28,7 +30,7 @@ void Scene::RemoveAll()
 
 void Scene::Update()
 {
-	for(auto& object : m_objects)
+	for (auto& object : m_objects)
 	{
 		object->Update();
 	}
@@ -42,3 +44,22 @@ void Scene::Render() const
 	}
 }
 
+const std::string& Scene::GetName() const
+{
+	return m_name;
+}
+
+void Scene::SetName(const std::string& name)
+{
+	m_name = name;
+}
+
+std::vector<std::unique_ptr<GameObject>>& Scene::GetGameObjects()
+{
+	return m_objects;
+}
+
+const std::vector<std::unique_ptr<GameObject>>& Scene::GetGameObjects() const
+{
+	return m_objects;
+}

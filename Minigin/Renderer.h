@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include "Singleton.h"
 #include "GraphPlot.h"
+#include <glm/glm.hpp>
 
 namespace dae
 {
@@ -26,6 +27,8 @@ namespace dae
 
 		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
 		void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
+
+		glm::vec2 GetWindowSize() const;
 
 	private:
 		//std::unique_ptr<GraphPlot> graphPlot;

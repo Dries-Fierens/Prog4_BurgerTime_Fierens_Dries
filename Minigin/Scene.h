@@ -16,6 +16,12 @@ namespace dae
 		void Update();
 		void Render() const;
 
+		std::vector<std::unique_ptr<GameObject>>& GetGameObjects();
+		const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const;
+
+		const std::string& GetName() const;
+		void SetName(const std::string& name);
+
 		~Scene() = default;
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
@@ -24,9 +30,9 @@ namespace dae
 
 	private:
 		friend class SceneManager;
-		explicit Scene() = default;
+		explicit Scene(const std::string& name);
 
-		std::vector < std::unique_ptr<GameObject>> m_objects{};
+		std::string m_name{};
+		std::vector<std::unique_ptr<GameObject>> m_objects{};
 	};
-
 }
