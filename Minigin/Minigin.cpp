@@ -20,7 +20,6 @@
 #include <thread>
 #include <chrono>
 #include "Locator.h"
-#include "GameManager.h"
 
 using namespace std;
 using namespace std::chrono;
