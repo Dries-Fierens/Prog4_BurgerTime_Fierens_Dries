@@ -16,48 +16,56 @@ void dae::EventQueue::SendEvent(const Event& event)
 
 void dae::EventQueue::NotifyListeners()
 {
-	m_isNotifying = true;
-
 	Event e{};
 	while (PollEvent(e))
 	{
-		for (auto*& listener : m_listeners)
+		const auto listenersSnapshot = m_listeners;
+
+		for (auto* listener : listenersSnapshot)
 		{
-			if (listener)
+			if (listener == nullptr)
 			{
-				listener->OnEvent(e);
+				continue;
 			}
+
+			const auto it = std::find(m_listeners.begin(), m_listeners.end(), listener);
+			if (it == m_listeners.end())
+			{
+				continue;
+			}
+
+			listener->OnEvent(e);
 		}
 	}
-
-	m_isNotifying = false;
-	CompactListeners();
 }
 
 void dae::EventQueue::AddListener(EventListener* listener)
 {
-	m_listeners.push_back(listener);
+	if (listener == nullptr)
+	{
+		return;
+	}
+
+	const auto it = std::find(m_listeners.begin(), m_listeners.end(), listener);
+	if (it == m_listeners.end())
+	{
+		m_listeners.push_back(listener);
+	}
 }
 
 void dae::EventQueue::RemoveListener(int listenerId)
 {
-	for (auto*& listener : m_listeners)
+	std::vector<EventListener*> newListeners;
+
+	for (auto* listener : m_listeners)
 	{
-		if (listener && listener->GetId() == listenerId)
+		if (listener && listener->GetId() != listenerId)
 		{
-			listener = nullptr;
+			newListeners.push_back(listener);
 		}
 	}
 
-	if (!m_isNotifying)
-	{
-		CompactListeners();
-	}
-}
-
-void dae::EventQueue::CompactListeners()
-{
-	std::erase(m_listeners, nullptr);
+	m_listeners = newListeners;
 }
 
 bool dae::EventQueue::PollEvent(Event& e)

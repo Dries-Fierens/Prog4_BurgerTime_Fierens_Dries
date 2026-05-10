@@ -43,9 +43,7 @@ namespace dae
 	private:
 		std::queue<Event> m_eventQueue{};
 		std::vector<EventListener*> m_listeners{};
-		bool m_isNotifying{ false };
 
 		bool PollEvent(Event& e);
-		void CompactListeners(); 
 	};
 }
