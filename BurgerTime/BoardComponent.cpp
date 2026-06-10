@@ -99,15 +99,7 @@ glm::vec3 BoardComponent::GetValidatedPosition(const glm::vec3& currentPosition,
 			continue;
 		}
 
-		glm::vec3 validatedPosition{ snappedX, proposedPosition.y, currentPosition.z };
-
-		float platformY{};
-		if (TryGetStandingPlatformY(validatedPosition, actorWidth, actorHeight, platformY))
-		{
-			validatedPosition.y = platformY - actorHeight;
-		}
-
-		return validatedPosition;
+		return glm::vec3{ snappedX, proposedPosition.y, currentPosition.z };
 	}
 
 	return currentPosition;
