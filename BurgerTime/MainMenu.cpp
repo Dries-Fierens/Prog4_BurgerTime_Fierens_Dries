@@ -17,7 +17,10 @@
 
 void MainMenu::Create()
 {
+
+#ifndef __EMSCRIPTEN__
 	Locator::GetAudio()->PlayMusic("Data/BGM.wav", 20, 1);
+#endif
 
 	dae::Scene* currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 

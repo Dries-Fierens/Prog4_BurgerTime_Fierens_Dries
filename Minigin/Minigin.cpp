@@ -90,7 +90,9 @@ dae::Minigin::Minigin(const std::filesystem::path& dataPath)
 
 dae::Minigin::~Minigin()
 {
+#ifndef __EMSCRIPTEN__
 	Locator::Shutdown();
+#endif
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;

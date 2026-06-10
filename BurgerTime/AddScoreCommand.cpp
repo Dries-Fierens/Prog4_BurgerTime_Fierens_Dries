@@ -4,7 +4,9 @@
 
 void AddScoreCommand::Execute()
 {
+#ifndef __EMSCRIPTEN__
 	Locator::GetAudio()->PlaySound("Coin.wav", 40, 0);
+#endif
 
 	if (!m_pGameObject)
 	{

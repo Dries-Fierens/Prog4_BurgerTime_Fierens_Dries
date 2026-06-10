@@ -19,8 +19,10 @@ void StartVersusCommand::Execute()
 	GameManager::GetInstance().SetGameState(GameManager::GameState::Versus);
 	for (auto& gameObject : Level::Create(1)) currentScene->Add(std::move(gameObject));
 
+#ifndef __EMSCRIPTEN__
 	Locator::Shutdown();
 	Locator::Initialize();
 	Locator::GetAudio()->PlayMusic("../Data/Game Start.wav", 10, -1);
+#endif
 }
 

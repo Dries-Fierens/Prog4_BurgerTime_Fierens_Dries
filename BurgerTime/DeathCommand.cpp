@@ -4,7 +4,9 @@
 
 void DeathCommand::Execute()
 {
+#ifndef __EMSCRIPTEN__
 	Locator::GetAudio()->PlaySound("Death.wav", 30, 0);
+#endif
 
 	if (!m_pGameObject)
 	{
