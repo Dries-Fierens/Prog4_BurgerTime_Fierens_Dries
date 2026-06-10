@@ -1,5 +1,6 @@
 #include "PlayerComponent.h"
 #include "EventQueue.h"
+#include "Timer.h"
 
 dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, GameObject* pOwner)
 	: BaseComponent(pOwner)
@@ -11,6 +12,15 @@ dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, GameObject* pO
 
 void dae::PlayerComponent::Update()
 {
+	if (m_invulnerabilityTimer > 0.f)
+	{
+		m_invulnerabilityTimer -= dae::Timer::GetInstance().GetDeltaTime();
+
+		if (m_invulnerabilityTimer < 0.f)
+		{
+			m_invulnerabilityTimer = 0.f;
+		}
+	}
 }
 
 void dae::PlayerComponent::Render() const
@@ -42,4 +52,15 @@ void dae::PlayerComponent::AddScore(int amount)
 	event.playerIndex = m_playerIndex;
 	event.value = m_score;
 	EventQueue::GetInstance().SendEvent(event);
+}
+
+void dae::PlayerComponent::HandleEnemyHit()
+{
+	if (!CanBeHit())
+	{
+		return;
+	}
+
+	LoseLife();
+	m_invulnerabilityTimer = INVULNERABILITY_DURATION;
 }

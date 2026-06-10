@@ -1,13 +1,15 @@
 #include "GameManager.h"
-#include "MainMenu.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Audio.h"
 #include "GameObject.h"
-#include "PlayerComponent.h"
+#include "HighScoreScene.h"
+#include "InputManager.h"
 #include "Level.h"
 #include "Locator.h"
-#include "Audio.h"
-#include "HighScoreScene.h"
+#include "MainMenu.h"
+#include "MuteCommand.h"
+#include "PlayerComponent.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 void GameManager::OnEvent(const Event& e)
 {
@@ -19,17 +21,8 @@ void GameManager::OnEvent(const Event& e)
 
 	if (e.name == "NextLevel")
 	{
-		bool goNextLevel = true;
-
-		// Example for next level condition
-		//for (const auto& go : currentScene->GetGameObjects())
-		//{
-		//	bool burgersComplete = go->HasComponent<dae::BurgerComponent>() && go->GetComponent<dae::BurgerComponent>()->IsComplete();
-		//	goNextLevel = burgersComplete;
-		//	break;
-		//}
-
-		if (goNextLevel) SetLevel();
+		SetLevel();
+		return;
 	}
 
 	if (e.name == "PlayerDied" && e.value <= 0)
@@ -44,7 +37,6 @@ void GameManager::OnEvent(const Event& e)
 void GameManager::Initialize()
 {
 	MainMenu::Create();
-
 	dae::EventQueue::GetInstance().AddListener(this);
 }
 
@@ -84,38 +76,36 @@ void GameManager::SetPlayerScore(int playerIndex, int score)
 
 void GameManager::SetLevel()
 {
-	if (m_gameState == GameState::Singleplayer ||
-		m_gameState == GameState::Coop ||
-		m_gameState == GameState::Versus)
+	if (m_gameState != GameState::Singleplayer &&
+		m_gameState != GameState::Coop &&
+		m_gameState != GameState::Versus)
 	{
-		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
-		auto& gameObjects = currentScene->GetGameObjects();
-
-		// Remove all game objects except players
-		for (const auto& go : gameObjects)
-		{
-			if (!go->HasComponent<dae::PlayerComponent>()) currentScene->Remove(go.get());
-		}
-
-		auto sceneName = currentScene->GetName();
-		char levelNumber = sceneName[sceneName.size() - 1];
-		if (std::isdigit(levelNumber))
-		{
-			m_currentLevel = levelNumber - '0';
-
-			if (m_currentLevel < m_totalLevels)
-			{
-				++m_currentLevel;
-				currentScene->SetName("Level " + std::to_string(m_currentLevel));
-				for (auto& gameObject : Level::Create(m_currentLevel)) currentScene->Add(std::move(gameObject));
-
-				dae::SceneManager::GetInstance().SetCurrentScene(currentScene);
-			}
-			else
-			{
-				HighScoreScene::Create();
-				m_gameState = GameState::HighScore;
-			}
-		}
+		return;
 	}
+
+	auto* currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+	if (currentScene == nullptr)
+	{
+		return;
+	}
+
+	++m_currentLevel;
+	if (m_currentLevel > m_totalLevels)
+	{
+		m_currentLevel = 1;
+	}
+
+	dae::InputManager::GetInstance().RemoveInputs();
+	dae::InputManager::GetInstance().AddKeyboardCommand(
+		std::make_unique<MuteCommand>(), SDLK_F2, dae::InputManager::InputType::OnDown);
+
+	currentScene->RemoveAll();
+	currentScene->SetName("Level " + std::to_string(m_currentLevel));
+
+	for (auto& gameObject : Level::Create(m_currentLevel))
+	{
+		currentScene->Add(std::move(gameObject));
+	}
+
+	dae::SceneManager::GetInstance().SetCurrentScene(currentScene);
 }

@@ -21,6 +21,6 @@ void StartVersusCommand::Execute()
 
 	Locator::Shutdown();
 	Locator::Initialize();
-	Locator::GetAudio()->PlayMusic("../Data/Game Start.wav", 20, -1);
+	Locator::GetAudio()->PlayMusic("../Data/Game Start.wav", 10, -1);
 }
 

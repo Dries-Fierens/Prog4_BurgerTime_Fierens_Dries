@@ -10,7 +10,7 @@ endif()
 set(ENGINE_TARGET Minigin)
 
 if(EMSCRIPTEN)
-  set(GAME_TARGET BurgerTime_web)
+  set(GAME_TARGET minigin_web)
   set(GAME_TARGET_PARAM)
 else()
   set(GAME_TARGET BurgerTime)
@@ -67,6 +67,8 @@ set(ENGINE_SOURCES
   Minigin/Timer.cpp
   Minigin/Transform.h
   Minigin/Transform.cpp
+  Minigin/SpriteComponent.h 
+  Minigin/SpriteComponent.cpp
 )
 
 set(GAME_SOURCES
@@ -99,7 +101,22 @@ set(GAME_SOURCES
   BurgerTime/StartSingleplayerCommand.cpp
   BurgerTime/StartVersusCommand.h
   BurgerTime/StartVersusCommand.cpp
-)
+  BurgerTime/GameRules.h 
+  BurgerTime/LevelData.h 
+  BurgerTime/LevelData.cpp 
+  BurgerTime/BoardComponent.h 
+  BurgerTime/BoardComponent.cpp
+  BurgerTime/BoardMoveCommand.h
+  BurgerTime/BoardMoveCommand.cpp
+  BurgerTime/BurgerIngredientComponent.h
+  BurgerTime/BurgerIngredientComponent.cpp 
+  BurgerTime/BurgerProgressComponent.h
+  BurgerTime/BurgerProgressComponent.cpp
+  BurgerTime/SpriteData.h 
+  BurgerTime/PlayerSpriteAnimatorComponent.h 
+  BurgerTime/PlayerSpriteAnimatorComponent.cpp 
+  BurgerTime/EnemyComponent.h
+  BurgerTime/EnemyComponent.cpp "BurgerTime/Enemy.h" "BurgerTime/Enemy.cpp" "BurgerTime/BurgerIngredientSpriteComponent.h" "BurgerTime/BurgerIngredientSpriteComponent.cpp")
 
 function(apply_warnings target_name)
   if(MSVC)
