@@ -22,7 +22,7 @@ void StartCoopCommand::Execute()
 #ifndef __EMSCRIPTEN__
 	Locator::Shutdown();
 	Locator::Initialize();
-	Locator::GetAudio()->PlayMusic("../Data/Game Start.wav", 10, -1);
+	Locator::GetAudio()->PlayMusic("Game Start.wav", 10, -1);
 #endif
 }
 

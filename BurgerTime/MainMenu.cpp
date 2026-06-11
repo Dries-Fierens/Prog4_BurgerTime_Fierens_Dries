@@ -19,7 +19,7 @@ void MainMenu::Create()
 {
 
 #ifndef __EMSCRIPTEN__
-	Locator::GetAudio()->PlayMusic("Data/BGM.wav", 20, 1);
+	Locator::GetAudio()->PlayMusic("BGM.wav", 20, 1);
 #endif
 
 	dae::Scene* currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
@@ -43,13 +43,13 @@ void MainMenu::Create()
 	glm::vec2 windowSize = dae::Renderer::GetInstance().GetWindowSize();
 
 	auto go = std::make_unique<dae::GameObject>();
-	auto logoBurgerTime = std::make_unique<dae::RenderComponent>("../Data/game_logo.png", go.get());
+	auto logoBurgerTime = std::make_unique<dae::RenderComponent>("game_logo.png", go.get());
 	auto logoSize = logoBurgerTime->GetSize();
 	go->AddComponent(std::move(logoBurgerTime));
 	go->SetLocalPosition(windowSize.x / 2 - logoSize.x / 2, 50);
 	currentScene->Add(std::move(go));
 
-	auto fontNES = dae::ResourceManager::GetInstance().LoadFont("../Data/Pixel_NES.otf", 32);
+	auto fontNES = dae::ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 32);
 
 	auto singleplayer = std::make_unique<dae::GameObject>();
 	auto singleplayerText = std::make_unique<dae::TextComponent>("PRESS 1 FOR SINGLEPLAYER", fontNES, singleplayer.get());

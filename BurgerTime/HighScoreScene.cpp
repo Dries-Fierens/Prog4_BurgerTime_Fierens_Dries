@@ -21,7 +21,7 @@ void HighScoreScene::Create()
 
 	dae::SceneManager::GetInstance().SetCurrentScene(currentScene);
 
-	auto fontNES = dae::ResourceManager::GetInstance().LoadFont("../Data/Pixel_NES.otf", 32);
+	auto fontNES = dae::ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 32);
 	auto windowSize = dae::Renderer::GetInstance().GetWindowSize();
 
 	auto titleObject = std::make_unique<dae::GameObject>();
