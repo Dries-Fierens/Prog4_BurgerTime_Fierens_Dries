@@ -3,11 +3,11 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, int pepperShots, const glm::vec3& spawnPosition, GameObject* pOwner)
+dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, int pepperShots, int initialScore, const glm::vec3& spawnPosition, GameObject* pOwner)
 	: BaseComponent(pOwner)
 	, m_playerIndex(playerIndex)
 	, m_lives(lives)
-	, m_score(0)
+	, m_score(initialScore)
 	, m_pepperShots(pepperShots)
 	, m_spawnPosition(spawnPosition)
 {

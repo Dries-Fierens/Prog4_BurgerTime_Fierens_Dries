@@ -15,7 +15,7 @@
 #include "GameRules.h"
 
 std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float y,
-	SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down)
+	int initialScore, SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down)
 {
 	auto playerObject = std::make_unique<dae::GameObject>();
 	auto* playerPtr = playerObject.get();
@@ -33,6 +33,7 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 		playerIndex,
 		BurgerTimeRules::StartingLives,
 		BurgerTimeRules::StartingPepperShots,
+		initialScore,
 		glm::vec3{ x, y, 0.f },
 		playerPtr));
 	playerObject->AddComponent(std::make_unique<dae::ColliderComponent>(PlayerColliderWidth, PlayerColliderHeight, playerPtr));
@@ -48,7 +49,7 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 }
 
 std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float y,
-	unsigned int controllerIndex)
+	int initialScore, unsigned int controllerIndex)
 {
 	auto playerObject = std::make_unique<dae::GameObject>();
 	auto* playerPtr = playerObject.get();
@@ -66,6 +67,7 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 		playerIndex,
 		BurgerTimeRules::StartingLives,
 		BurgerTimeRules::StartingPepperShots,
+		initialScore,
 		glm::vec3{ x, y, 0.f },
 		playerPtr));
 	playerObject->AddComponent(std::make_unique<dae::ColliderComponent>(PlayerColliderWidth, PlayerColliderHeight, playerPtr));
@@ -86,7 +88,7 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 }
 
 std::vector<std::unique_ptr<dae::GameObject>> Player::CreateUI(const std::shared_ptr<dae::Font>& font,
-	int playerIndex, float x, float y)
+	int playerIndex, int initialScore, float x, float y)
 {
 	std::vector<std::unique_ptr<dae::GameObject>> uiElements;
 
@@ -97,7 +99,7 @@ std::vector<std::unique_ptr<dae::GameObject>> Player::CreateUI(const std::shared
 	uiElements.push_back(std::move(livesObject));
 
 	auto scoreObject = std::make_unique<dae::GameObject>();
-	auto scoreDisplay = std::make_unique<dae::ScoreDisplayComponent>(playerIndex, 0, font, scoreObject.get());
+	auto scoreDisplay = std::make_unique<dae::ScoreDisplayComponent>(playerIndex, initialScore, font, scoreObject.get());
 	scoreObject->AddComponent(std::move(scoreDisplay));
 	scoreObject->SetLocalPosition(x, y + 36.f);
 	uiElements.push_back(std::move(scoreObject));

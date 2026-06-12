@@ -21,5 +21,5 @@ void StartSingleplayerCommand::Execute()
 
 	Locator::Shutdown();
 	Locator::Initialize();
-	Locator::GetAudio()->PlayMusic("Game Start.wav", 10, -1);
+	Locator::GetAudio()->PlayMusic("Game Start.wav", 5, -1);
 }

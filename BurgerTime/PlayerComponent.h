@@ -7,7 +7,7 @@ namespace dae
 	class PlayerComponent final : public BaseComponent
 	{
 	public:
-		PlayerComponent(int playerIndex, int lives, int pepperShots, const glm::vec3& spawnPosition, GameObject* pOwner);
+		PlayerComponent(int playerIndex, int lives, int pepperShots, int initialScore, const glm::vec3& spawnPosition, GameObject* pOwner);
 
 		void Update() override;
 		void Render() const override;

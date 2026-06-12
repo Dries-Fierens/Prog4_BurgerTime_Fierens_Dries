@@ -64,6 +64,18 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 
 	const auto& levelLayout = GetLevelLayout(levelNumber);
 	const glm::vec2 windowSize = dae::Renderer::GetInstance().GetWindowSize();
+	const auto& playerScores = GameManager::GetInstance().GetPlayerScores();
+
+	const auto getPlayerScore = [&playerScores](int playerIndex) -> int
+		{
+			const size_t scoreIndex = static_cast<size_t>(playerIndex - 1);
+			if (scoreIndex >= playerScores.size())
+			{
+				return 0;
+			}
+
+			return playerScores[scoreIndex];
+		};
 
 	auto backgroundObject = std::make_unique<dae::GameObject>();
 	auto background = std::make_unique<dae::RenderComponent>(GetBackgroundTexture(levelLayout.number), backgroundObject.get());
@@ -138,60 +150,68 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 	{
 	case GameManager::GameState::Singleplayer:
 	{
-		auto uiElements = Player::CreateUI(infoFont, 1, leftUiX, uiY);
+		const int playerOneScore = getPlayerScore(1);
+
+		auto uiElements = Player::CreateUI(infoFont, 1, playerOneScore, leftUiX, uiY);
 		for (auto& element : uiElements)
 		{
 			level.push_back(std::move(element));
 		}
 
 		const glm::vec2 spawnPosition = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerOne);
-		auto player = Player::Create(1, spawnPosition.x, spawnPosition.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
+		auto player = Player::Create(1, spawnPosition.x, spawnPosition.y, playerOneScore, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
 		level.push_back(std::move(player));
 		break;
 	}
 	case GameManager::GameState::Coop:
 	{
-		auto uiElements1 = Player::CreateUI(infoFont, 1, leftUiX, uiY);
+		const int playerOneScore = getPlayerScore(1);
+		const int playerTwoScore = getPlayerScore(2);
+
+		auto uiElements1 = Player::CreateUI(infoFont, 1, playerOneScore, leftUiX, uiY);
 		for (auto& element : uiElements1)
 		{
 			level.push_back(std::move(element));
 		}
 
 		const glm::vec2 playerOneSpawn = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerOne);
-		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
+		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, playerOneScore, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
 		level.push_back(std::move(player1));
 
-		auto uiElements2 = Player::CreateUI(infoFont, 2, rightUiX, uiY);
+		auto uiElements2 = Player::CreateUI(infoFont, 2, playerTwoScore, rightUiX, uiY);
 		for (auto& element : uiElements2)
 		{
 			level.push_back(std::move(element));
 		}
 
 		const glm::vec2 playerTwoSpawn = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerTwo);
-		auto player2 = Player::Create(2, playerTwoSpawn.x, playerTwoSpawn.y, 0);
+		auto player2 = Player::Create(2, playerTwoSpawn.x, playerTwoSpawn.y, playerTwoScore, 0);
 		level.push_back(std::move(player2));
 		break;
 	}
 	case GameManager::GameState::Versus:
 	{
-		auto uiElements1 = Player::CreateUI(infoFont, 1, leftUiX, uiY);
+		const int playerOneScore = getPlayerScore(1);
+		const int playerTwoScore = getPlayerScore(2);
+
+		auto uiElements1 = Player::CreateUI(infoFont, 1, playerOneScore, leftUiX, uiY);
 		for (auto& element : uiElements1)
 		{
 			level.push_back(std::move(element));
 		}
 
 		const glm::vec2 playerOneSpawn = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerOne);
-		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
+		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, playerOneScore, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
 		level.push_back(std::move(player1));
 
-		auto uiElements2 = Player::CreateUI(infoFont, 2, rightUiX, uiY);
+		auto uiElements2 = Player::CreateUI(infoFont, 2, playerTwoScore, rightUiX, uiY);
 		for (auto& element : uiElements2)
 		{
 			level.push_back(std::move(element));
 		}
 
 		const glm::vec2 versusSpawn = GetPlayerSpawnPosition(levelLayout.playerSpawns.versusEnemy);
-		auto versusActor = Player::Create(2, versusSpawn.x, versusSpawn.y, 0);
+		auto versusActor = Player::Create(2, versusSpawn.x, versusSpawn.y, playerTwoScore, 0);
 		level.push_back(std::move(versusActor));
 		break;
 	}

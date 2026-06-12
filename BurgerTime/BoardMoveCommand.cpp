@@ -1,6 +1,5 @@
 #include "BoardMoveCommand.h"
 #include "BoardComponent.h"
-#include "ColliderComponent.h"
 #include "PlayerComponent.h"
 #include "Timer.h"
 
@@ -28,7 +27,6 @@ void BoardMoveCommand::Execute()
 	}
 
 	glm::vec3 proposedPosition = m_pGameObject->GetPosition();
-	const glm::vec3 originalPosition = proposedPosition;
 
 	if (m_moveHorizontally)
 	{
@@ -42,15 +40,13 @@ void BoardMoveCommand::Execute()
 	const auto* pBoard = BoardComponent::GetActiveBoard();
 	if (pBoard != nullptr)
 	{
-		proposedPosition = pBoard->GetValidatedPosition(originalPosition, proposedPosition,
-			m_actorWidth, m_actorHeight, m_moveHorizontally);
+		proposedPosition = pBoard->GetValidatedPosition(
+			m_pGameObject->GetPosition(),
+			proposedPosition,
+			m_actorWidth,
+			m_actorHeight,
+			m_moveHorizontally);
 	}
 
 	m_pGameObject->SetLocalPosition(proposedPosition);
-
-	const auto* pCollider = m_pGameObject->GetComponent<dae::ColliderComponent>();
-	if (pCollider != nullptr && pCollider->IsOverlapping())
-	{
-		m_pGameObject->SetLocalPosition(originalPosition);
-	}
 }

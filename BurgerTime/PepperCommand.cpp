@@ -4,6 +4,8 @@
 #include "PlayerComponent.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "SpriteComponent.h"
+#include "SpriteData.h"
 
 PepperCommand::PepperCommand(dae::GameObject* pPlayer)
 	: m_pPlayer(pPlayer)
@@ -38,9 +40,14 @@ void PepperCommand::Execute()
 	const float offsetX = isFacingRight ? 28.f : -44.f;
 
 	pepperObject->SetLocalPosition(playerPosition.x + offsetX, playerPosition.y);
-	pepperObject->AddComponent(std::make_unique<PepperCloudComponent>(
-		pPlayerComponent->GetPlayerIndex(),
-		pPepperObject));
+
+	auto sprite = std::make_unique<dae::SpriteComponent>("sprites.png", pPepperObject);
+	sprite->SetSourceRect(BurgerTimeSprites::GetPepperCloudFrame());
+	sprite->SetSize(48.f, 32.f);
+	sprite->SetFlipHorizontal(isFacingRight);
+	pepperObject->AddComponent(std::move(sprite));
+
+	pepperObject->AddComponent(std::make_unique<PepperCloudComponent>(pPepperObject));
 
 	pScene->Add(std::move(pepperObject));
 }

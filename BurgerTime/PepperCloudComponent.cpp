@@ -3,26 +3,25 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "SpriteComponent.h"
 #include "Timer.h"
-#include <algorithm>
 
-PepperCloudComponent::PepperCloudComponent(int playerIndex, dae::GameObject* pOwner)
+PepperCloudComponent::PepperCloudComponent(dae::GameObject* pOwner)
 	: BaseComponent(pOwner)
-	, m_playerIndex(playerIndex)
 {
 }
 
 void PepperCloudComponent::Update()
 {
-	if (m_hasExpired)
-	{
-		return;
-	}
-
 	m_lifeTime -= dae::Timer::GetInstance().GetDeltaTime();
 	if (m_lifeTime <= 0.f)
 	{
-		m_hasExpired = true;
+		auto* pSprite = GetOwner()->GetComponent<dae::SpriteComponent>();
+		if (pSprite != nullptr)
+		{
+			pSprite->SetVisible(false);
+		}
+
 		return;
 	}
 
@@ -41,7 +40,7 @@ void PepperCloudComponent::Update()
 	for (const auto& gameObject : pScene->GetGameObjects())
 	{
 		auto* pEnemyComponent = gameObject->GetComponent<EnemyComponent>();
-		if (pEnemyComponent == nullptr)
+		if (pEnemyComponent == nullptr || pEnemyComponent->IsRespawning())
 		{
 			continue;
 		}
