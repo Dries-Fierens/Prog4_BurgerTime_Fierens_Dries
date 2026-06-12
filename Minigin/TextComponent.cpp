@@ -11,6 +11,9 @@ dae::TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font>
 	m_font(std::move(font)), 
 	m_renderComponent(std::make_unique<RenderComponent>(static_cast<std::shared_ptr<Texture2D>>(nullptr), pOwner))
 {
+#ifdef __EMSCRIPTEN__
+	m_color = { 0, 0, 0, 255 };
+#endif
 }
 
 void dae::TextComponent::Update()

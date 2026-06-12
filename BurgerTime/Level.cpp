@@ -131,8 +131,8 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 	}
 
 	const float leftUiX{ 10.f };
-	const float rightUiX{ windowSize.x - 170.f };
-	const float uiY{ 60.f };
+	const float rightUiX{ windowSize.x - 140.f };
+	const float uiY{ 504.f };
 
 	switch (GameManager::GetInstance().GetGameState())
 	{

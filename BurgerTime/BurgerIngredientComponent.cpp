@@ -17,7 +17,6 @@ BurgerIngredientComponent::BurgerIngredientComponent(IngredientType type, float 
 	, m_width(width)
 	, m_dropStops(std::move(dropStops))
 {
-	RefreshDebugText();
 }
 
 void BurgerIngredientComponent::Update()
@@ -67,8 +66,6 @@ void BurgerIngredientComponent::UpdateWalkProgress()
 	const auto ingredientPosition = GetOwner()->GetPosition();
 	const float segmentWidth = m_width / static_cast<float>(SEGMENT_COUNT);
 
-	bool hasProgressChanged{};
-
 	for (const auto& gameObject : pScene->GetGameObjects())
 	{
 		if (!gameObject->HasComponent<dae::PlayerComponent>())
@@ -97,13 +94,7 @@ void BurgerIngredientComponent::UpdateWalkProgress()
 		{
 			m_walkedSegments[static_cast<size_t>(segmentIndex)] = true;
 			m_lastTriggerPlayerIndex = pPlayerComponent->GetPlayerIndex();
-			hasProgressChanged = true;
 		}
-	}
-
-	if (hasProgressChanged)
-	{
-		RefreshDebugText();
 	}
 
 	if (AreAllSegmentsWalked())
@@ -144,38 +135,15 @@ void BurgerIngredientComponent::UpdateDrop()
 	if (m_nextDropIndex >= m_dropStops.size())
 	{
 		m_isComplete = true;
-		RefreshDebugText();
 		return;
 	}
 
 	ResetWalkProgress();
-	RefreshDebugText();
 }
 
 void BurgerIngredientComponent::ResetWalkProgress()
 {
 	std::fill(m_walkedSegments.begin(), m_walkedSegments.end(), false);
-}
-
-void BurgerIngredientComponent::RefreshDebugText() const
-{
-	auto* pTextComponent = GetOwner()->GetComponent<dae::TextComponent>();
-	if (pTextComponent == nullptr)
-	{
-		return;
-	}
-
-	if (m_isComplete)
-	{
-		pTextComponent->SetText(GetShortLabel() + " DONE");
-		pTextComponent->SetColor(SDL_Color{ 160, 160, 160, 255 });
-		pTextComponent->Update();
-		return;
-	}
-
-	const auto walkedCount = static_cast<int>(std::count(m_walkedSegments.begin(), m_walkedSegments.end(), true));
-	pTextComponent->SetText(GetShortLabel() + " " + std::to_string(walkedCount) + "/4");
-	pTextComponent->Update();
 }
 
 void BurgerIngredientComponent::AwardDropScore() const
@@ -214,25 +182,4 @@ bool BurgerIngredientComponent::AreAllSegmentsWalked() const
 		{
 			return walkedSegment;
 		});
-}
-
-std::string BurgerIngredientComponent::GetShortLabel() const
-{
-	switch (m_type)
-	{
-	case IngredientType::TopBun:
-		return "TOP";
-	case IngredientType::BottomBun:
-		return "BOT";
-	case IngredientType::Patty:
-		return "PAT";
-	case IngredientType::Cheese:
-		return "CHS";
-	case IngredientType::Lettuce:
-		return "LET";
-	case IngredientType::Tomato:
-		return "TOM";
-	default:
-		return "UNK";
-	}
 }

@@ -3,8 +3,9 @@
 #include <SDL3/SDL.h>
 #include <algorithm>
 #include <filesystem>
-#include <thread>
 #include <unordered_map>
+
+namespace fs = std::filesystem;
 
 class ConsoleAudio::ConsoleAudioImpl final
 {
@@ -16,17 +17,6 @@ public:
 
 	~ConsoleAudioImpl()
 	{
-		{
-			std::lock_guard<std::mutex> lock(m_mutex);
-			m_running = false;
-		}
-		m_conditionVariable.notify_all();
-
-		if (m_thread.joinable())
-		{
-			m_thread.join();
-		}
-
 		if (m_pSoundTrack)
 		{
 			MIX_DestroyTrack(m_pSoundTrack);
@@ -98,17 +88,12 @@ public:
 			std::cout << "Could not create mixer tracks! Error: " << SDL_GetError() << std::endl;
 			return;
 		}
-
-		m_thread = std::thread(&ConsoleAudioImpl::Update, this);
 	}
 
 	void Update()
 	{
 		for (;;)
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
-			m_conditionVariable.wait(lock, [this] { return !m_queue.empty() || !m_running; });
-
 			if (!m_running)
 			{
 				break;
@@ -116,46 +101,8 @@ public:
 
 			SoundEvent e = m_queue.front();
 			m_queue.pop();
-			lock.unlock();
 
-			if (!e.pAudio)
-			{
-				continue;
-			}
-
-			auto* pTrack = e.isMusic ? m_pMusicTrack : m_pSoundTrack;
-			if (!pTrack)
-			{
-				continue;
-			}
-
-			if (e.isMusic && (MIX_TrackPlaying(m_pMusicTrack) || MIX_TrackPaused(m_pMusicTrack)))
-			{
-				continue;
-			}
-
-			MIX_SetTrackAudio(pTrack, e.pAudio);
-			MIX_SetTrackGain(pTrack, VolumeToGain(e.volume));
-
-			SDL_PropertiesID playOptions{ 0 };
-			if (e.loops != 0)
-			{
-				playOptions = SDL_CreateProperties();
-				if (playOptions != 0)
-				{
-					SDL_SetNumberProperty(playOptions, MIX_PROP_PLAY_LOOPS_NUMBER, static_cast<Sint64>(e.loops));
-				}
-			}
-
-			if (!MIX_PlayTrack(pTrack, playOptions))
-			{
-				std::cout << "Could not play audio! Error: " << SDL_GetError() << std::endl;
-			}
-
-			if (playOptions != 0)
-			{
-				SDL_DestroyProperties(playOptions); 
-			}
+			PlayAudioEvent(e);
 		}
 	}
 
@@ -206,25 +153,15 @@ private:
 	};
 
 	bool m_running;
-	std::mutex m_mutex;
-	std::condition_variable m_conditionVariable;
 	std::queue<SoundEvent> m_queue;
 	std::unordered_map<std::string, MIX_Audio*> m_loadedAudio;
 	MIX_Mixer* m_pMixer{};
 	MIX_Track* m_pSoundTrack{};
 	MIX_Track* m_pMusicTrack{};
-	std::thread m_thread;
 	bool m_initializedAudioSubsystem{};
-
-	static float VolumeToGain(int volume)
-	{
-		return static_cast<float>(std::clamp(volume, 0, 100)) / 100.0f;
-	}
 
 	static std::string ResolveAudioPath(const std::string& file)
 	{
-		namespace fs = std::filesystem;
-
 		const fs::path requestedPath{ file };
 		if (requestedPath.is_absolute() || fs::exists(requestedPath))
 		{
@@ -254,18 +191,60 @@ private:
 		return file;
 	}
 
+	void PlayAudioEvent(const SoundEvent& e)
+	{
+		if (!e.pAudio)
+		{
+			return;
+		}
+
+		auto* pTrack = e.isMusic ? m_pMusicTrack : m_pSoundTrack;
+		if (!pTrack)
+		{
+			return;
+		}
+
+		if (e.isMusic && (MIX_TrackPlaying(m_pMusicTrack) || MIX_TrackPaused(m_pMusicTrack)))
+		{
+			return;
+		}
+
+		MIX_SetTrackAudio(pTrack, e.pAudio);
+		float gain = static_cast<float>(std::clamp(e.volume, 0, 100)) / 100.0f;
+		MIX_SetTrackGain(pTrack, gain);
+
+		SDL_PropertiesID playOptions{ 0 };
+		if (e.loops != 0)
+		{
+			playOptions = SDL_CreateProperties();
+			if (playOptions != 0)
+			{
+				SDL_SetNumberProperty(playOptions, MIX_PROP_PLAY_LOOPS_NUMBER, static_cast<Sint64>(e.loops));
+			}
+		}
+
+		if (!MIX_PlayTrack(pTrack, playOptions))
+		{
+			std::cout << "Could not play audio! Error: " << SDL_GetError() << std::endl;
+		}
+
+		if (playOptions != 0)
+		{
+			SDL_DestroyProperties(playOptions);
+		}
+	}
+
 	void QueueAudio(const std::string& file, int volume, bool isMusic, int loops)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-
 		auto* pAudio = LoadAudio(file);
 		if (!pAudio)
 		{
 			return;
 		}
 
-		m_queue.push(SoundEvent{ pAudio, volume, isMusic, loops });
-		m_conditionVariable.notify_all();
+		const SoundEvent event{ pAudio, volume, isMusic, loops };
+
+		PlayAudioEvent(event);
 	}
 
 	MIX_Audio* LoadAudio(const std::string& file)

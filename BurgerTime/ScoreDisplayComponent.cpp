@@ -42,5 +42,6 @@ void dae::ScoreDisplayComponent::OnEvent(const Event& event)
 void dae::ScoreDisplayComponent::RefreshText() const
 {
 	m_textComponent->SetText("P" + std::to_string(m_playerIndex) + " Score: " + std::to_string(m_score));
+	m_textComponent->SetColor({ 255, 255, 255, 255 });
 	m_textComponent->Update();
 }

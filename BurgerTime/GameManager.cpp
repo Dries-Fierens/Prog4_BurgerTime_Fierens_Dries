@@ -27,10 +27,8 @@ void GameManager::OnEvent(const Event& e)
 
 	if (e.name == "PlayerDied" && e.value <= 0)
 	{
-#ifndef __EMSCRIPTEN__
 		Locator::Shutdown();
 		Locator::Initialize();
-#endif
 		HighScoreScene::Create();
 		m_gameState = GameState::HighScore;
 	}

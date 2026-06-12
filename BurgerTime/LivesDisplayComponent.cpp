@@ -42,5 +42,6 @@ void dae::LivesDisplayComponent::OnEvent(const Event& event)
 void dae::LivesDisplayComponent::RefreshText() const
 {
 	m_textComponent->SetText("P" + std::to_string(m_playerIndex) + " Lives: " + std::to_string(m_lives));
+	m_textComponent->SetColor({ 255, 255, 255, 255 });
 	m_textComponent->Update();
 }

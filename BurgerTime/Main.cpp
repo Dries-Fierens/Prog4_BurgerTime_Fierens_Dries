@@ -23,9 +23,7 @@ namespace fs = std::filesystem;
 
 static void load()
 {
-#ifndef __EMSCRIPTEN__
 	Locator::Initialize();
-#endif
 	GameManager::GetInstance().Initialize();
 }
 

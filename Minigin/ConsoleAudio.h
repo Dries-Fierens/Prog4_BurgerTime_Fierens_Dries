@@ -1,8 +1,6 @@
 #pragma once
 #include "Audio.h"
-#include <mutex>
 #include <queue>
-#include <condition_variable>
 #include <iostream>
 
 class ConsoleAudio final : public Audio
