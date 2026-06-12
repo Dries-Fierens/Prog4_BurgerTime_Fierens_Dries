@@ -13,8 +13,7 @@ public:
 
 private:
 	glm::vec3 m_previousPosition{};
-	bool m_isInitialized{};
 	BurgerTimeSprites::Facing m_facing{ BurgerTimeSprites::Facing::Left };
 
-	const float m_moveEpsilon{ 0.01f };
+	const float MOVE_EPSILON{ 0.01f };
 };

@@ -43,7 +43,8 @@ namespace BurgerTimeSprites
 	inline constexpr SDL_FRect Cheese{ MakeRect(8, 3, 4, 1) };
 	inline constexpr SDL_FRect Lettuce{ MakeRect(8, 4, 4, 1) };
 	inline constexpr SDL_FRect Tomato{ MakeRect(8, 5, 4, 1) };
-	inline constexpr SDL_FRect Plate{ MakeRect(8, 6, 4, 1) };
+
+	inline constexpr SDL_FRect PepperCloud{ MakeRect(12, 0, 3, 2) };
 
 	inline SDL_FRect GetPlayerFrame(int playerIndex, Facing facing, bool isMoving, int animationFrame)
 	{
@@ -103,8 +104,8 @@ namespace BurgerTimeSprites
 		}
 	}
 
-	inline SDL_FRect GetPlateFrame()
+	inline SDL_FRect GetPepperCloudFrame()
 	{
-		return Plate;
+		return PepperCloud;
 	}
 }

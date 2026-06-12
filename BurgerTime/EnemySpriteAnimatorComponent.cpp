@@ -1,7 +1,6 @@
 #include "EnemySpriteAnimatorComponent.h"
 #include "GameObject.h"
 #include "SpriteComponent.h"
-
 #include <cmath>
 
 EnemySpriteAnimatorComponent::EnemySpriteAnimatorComponent(dae::GameObject* pOwner)
@@ -19,21 +18,13 @@ void EnemySpriteAnimatorComponent::Update()
 
 	const glm::vec3 currentPosition = GetOwner()->GetPosition();
 
-	if (!m_isInitialized)
-	{
-		m_previousPosition = currentPosition;
-		m_isInitialized = true;
-		pSpriteComponent->SetFlipHorizontal(false);
-		return;
-	}
-
 	const glm::vec3 delta = currentPosition - m_previousPosition;
 
-	if (delta.x < -m_moveEpsilon)
+	if (delta.x < -MOVE_EPSILON)
 	{
 		m_facing = BurgerTimeSprites::Facing::Left;
 	}
-	else if (delta.x > m_moveEpsilon)
+	else if (delta.x > MOVE_EPSILON)
 	{
 		m_facing = BurgerTimeSprites::Facing::Right;
 	}

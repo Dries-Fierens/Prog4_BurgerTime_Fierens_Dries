@@ -222,7 +222,7 @@ static LevelLayout CreateLevelOne()
 				})
 		},
 		{
-			{ EnemyType::HotDog, { 216.f, 170.f } },
+			//{ EnemyType::HotDog, { 216.f, 170.f } },
 			{ EnemyType::Pickle, { 490.f, 240.f } },
 			{ EnemyType::Egg, { 332.f, 42.f } }
 		}

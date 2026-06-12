@@ -13,15 +13,23 @@ public:
 
 	EnemyType GetType() const { return m_type; }
 
+	void Stun();
+	bool IsStunned() const { return m_stunTimer > 0.f; }
+	bool IsRespawning() const { return m_respawnTimer > 0.f; }
+
 private:
 	bool HasMoved(const glm::vec3& from, const glm::vec3& to)
 	{
 		return std::abs(from.x - to.x) > MOVEMENT_EPSILON || std::abs(from.y - to.y) > MOVEMENT_EPSILON;
 	}
 
+	void Respawn();
+
 	EnemyType m_type{};
 	float m_speed{};
 	float m_contactTimer{};
+	float m_stunTimer{};
+	float m_respawnTimer{};
 	glm::vec3 m_spawnPosition{};
 
 	const float ENEMY_WIDTH{ 32.f };
@@ -30,4 +38,6 @@ private:
 	const float SAME_LEVEL_TOLERANCE{ 10.f };
 	const float LADDER_APPROACH_THRESHOLD{ 8.f };
 	const float MOVEMENT_EPSILON{ 0.001f };
+	const float STUN_DURATION{ 2.5f };
+	const float RESPAWN_DURATION{ 1.0f };
 };

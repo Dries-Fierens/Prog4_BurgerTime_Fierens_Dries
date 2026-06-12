@@ -3,11 +3,12 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, const glm::vec3& spawnPosition, GameObject* pOwner)
+dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, int pepperShots, const glm::vec3& spawnPosition, GameObject* pOwner)
 	: BaseComponent(pOwner)
 	, m_playerIndex(playerIndex)
 	, m_lives(lives)
 	, m_score(0)
+	, m_pepperShots(pepperShots)
 	, m_spawnPosition(spawnPosition)
 {
 }
@@ -79,6 +80,24 @@ bool dae::PlayerComponent::HandleEnemyHit()
 		m_deathPauseTimer = DEATH_PAUSE_DURATION;
 		m_invulnerabilityTimer = INVULNERABILITY_DURATION;
 	}
+
+	return true;
+}
+
+bool dae::PlayerComponent::UsePepper()
+{
+	if (m_pepperShots <= 0 || !CanMove())
+	{
+		return false;
+	}
+
+	--m_pepperShots;
+
+	Event event{};
+	event.name = "PepperChanged";
+	event.playerIndex = m_playerIndex;
+	event.value = m_pepperShots;
+	EventQueue::GetInstance().SendEvent(event);
 
 	return true;
 }

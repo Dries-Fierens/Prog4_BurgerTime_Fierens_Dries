@@ -5,6 +5,7 @@
 #include "PlayerComponent.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "SpriteComponent.h"
 #include "Timer.h"
 #include <cmath>
 #include <limits>
@@ -42,6 +43,32 @@ void EnemyComponent::Update()
 		{
 			m_contactTimer = 0.f;
 		}
+	}
+
+	auto* pSpriteComponent = GetOwner()->GetComponent<dae::SpriteComponent>();
+	if (pSpriteComponent != nullptr)
+	{
+		pSpriteComponent->SetVisible(m_respawnTimer <= 0.f);
+	}
+
+	if (m_respawnTimer > 0.f)
+	{
+		m_respawnTimer -= deltaTime;
+		if (m_respawnTimer < 0.f)
+		{
+			m_respawnTimer = 0.f;
+		}
+		return;
+	}
+
+	if (m_stunTimer > 0.f)
+	{
+		m_stunTimer -= deltaTime;
+		if (m_stunTimer < 0.f)
+		{
+			m_stunTimer = 0.f;
+		}
+		return;
 	}
 
 	auto* pScene = dae::SceneManager::GetInstance().GetCurrentScene();
@@ -154,7 +181,7 @@ void EnemyComponent::Update()
 	{
 		if (pTargetPlayerComponent->HandleEnemyHit())
 		{
-			GetOwner()->SetLocalPosition(m_spawnPosition);
+			Respawn();
 			m_contactTimer = CONTACT_DAMAGE_COOLDOWN;
 		}
 	}
@@ -162,4 +189,21 @@ void EnemyComponent::Update()
 
 void EnemyComponent::Render() const
 {
+}
+
+void EnemyComponent::Stun()
+{
+	if (IsRespawning())
+	{
+		return;
+	}
+
+	m_stunTimer = STUN_DURATION;
+}
+
+void EnemyComponent::Respawn()
+{
+	GetOwner()->SetLocalPosition(m_spawnPosition);
+	m_respawnTimer = RESPAWN_DURATION;
+	m_stunTimer = 0.f;
 }

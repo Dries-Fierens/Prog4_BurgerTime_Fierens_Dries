@@ -33,16 +33,6 @@ void PlayerSpriteAnimatorComponent::Update()
 
 	const glm::vec3 currentPosition = GetOwner()->GetPosition();
 
-	if (!m_isInitialized)
-	{
-		m_previousPosition = currentPosition;
-		m_isInitialized = true;
-		pSpriteComponent->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-			m_playerIndex, BurgerTimeSprites::Facing::Left, false, 0));
-		pSpriteComponent->SetFlipHorizontal(false);
-		return;
-	}
-
 	const glm::vec3 delta = currentPosition - m_previousPosition;
 
 	const bool isMovingHorizontally = std::abs(delta.x) > MOVE_EPSILON;
@@ -56,6 +46,11 @@ void PlayerSpriteAnimatorComponent::Update()
 	else if (delta.x > MOVE_EPSILON)
 	{
 		m_facing = BurgerTimeSprites::Facing::Right;
+	}
+
+	if (pPlayerComponent != nullptr)
+	{
+		pPlayerComponent->SetFacingRight(m_facing == BurgerTimeSprites::Facing::Right);
 	}
 
 	if (isMoving)
