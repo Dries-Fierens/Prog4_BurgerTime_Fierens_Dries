@@ -23,26 +23,27 @@ namespace BurgerTimeSprites
 		};
 	}
 
-	inline constexpr SDL_FRect PeterIdleRight{ MakeRect(0, 0) };
-	inline constexpr SDL_FRect PeterWalkRight{ MakeRect(1, 0) };
-	inline constexpr SDL_FRect PeterIdleLeft{ MakeRect(2, 0) };
-	inline constexpr SDL_FRect PeterWalkLeft{ MakeRect(3, 0) };
+	inline constexpr SDL_FRect PeterIdleRight{ MakeRect(5, 0) };
+	inline constexpr SDL_FRect PeterWalkRight{ MakeRect(6, 0) };
+	inline constexpr SDL_FRect PeterIdleLeft{ MakeRect(5, 0) };
+	inline constexpr SDL_FRect PeterWalkLeft{ MakeRect(6, 0) };
 
-	inline constexpr SDL_FRect SaltIdleRight{ MakeRect(4, 0) };
-	inline constexpr SDL_FRect SaltWalkRight{ MakeRect(5, 0) };
-	inline constexpr SDL_FRect SaltIdleLeft{ MakeRect(6, 0) };
-	inline constexpr SDL_FRect SaltWalkLeft{ MakeRect(7, 0) };
+	inline constexpr SDL_FRect SaltIdleRight{ MakeRect(5, 0) };
+	inline constexpr SDL_FRect SaltWalkRight{ MakeRect(6, 0) };
+	inline constexpr SDL_FRect SaltIdleLeft{ MakeRect(5, 0) };
+	inline constexpr SDL_FRect SaltWalkLeft{ MakeRect(6, 0) };
 
 	inline constexpr SDL_FRect HotDogIdle{ MakeRect(0, 3) };
 	inline constexpr SDL_FRect PickleIdle{ MakeRect(0, 5) };
 	inline constexpr SDL_FRect EggIdle{ MakeRect(0, 7) };
 
-	inline constexpr SDL_FRect TopBun{ MakeRect(8, 4, 1, 4) };
-	inline constexpr SDL_FRect BottomBun{ MakeRect(8, 4, 4, 1) };
-	inline constexpr SDL_FRect Patty{ MakeRect(8, 4, 2, 1) };
-	inline constexpr SDL_FRect Cheese{ MakeRect(0, 2, 2, 1) };
-	inline constexpr SDL_FRect Lettuce{ MakeRect(0, 4, 2, 1) };
-	inline constexpr SDL_FRect Tomato{ MakeRect(2, 1, 2, 1) };
+	inline constexpr SDL_FRect TopBun{ MakeRect(8, 0, 4, 1) };
+	inline constexpr SDL_FRect BottomBun{ MakeRect(8, 1, 4, 1) };
+	inline constexpr SDL_FRect Patty{ MakeRect(8, 2, 4, 1) };
+	inline constexpr SDL_FRect Cheese{ MakeRect(8, 3, 4, 1) };
+	inline constexpr SDL_FRect Lettuce{ MakeRect(8, 4, 4, 1) };
+	inline constexpr SDL_FRect Tomato{ MakeRect(8, 5, 4, 1) };
+	inline constexpr SDL_FRect Plate{ MakeRect(8, 6, 4, 1) };
 
 	inline SDL_FRect GetPlayerFrame(int playerIndex, Facing facing, bool isMoving, int animationFrame)
 	{
@@ -100,5 +101,10 @@ namespace BurgerTimeSprites
 		default:
 			return Patty;
 		}
+	}
+
+	inline SDL_FRect GetPlateFrame()
+	{
+		return Plate;
 	}
 }

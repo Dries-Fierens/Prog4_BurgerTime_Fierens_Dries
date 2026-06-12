@@ -1,5 +1,6 @@
 #include "PlayerComponent.h"
 #include "EventQueue.h"
+#include "GameObject.h"
 #include "Timer.h"
 
 dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, GameObject* pOwner)
@@ -7,6 +8,7 @@ dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, GameObject* pO
 	, m_playerIndex(playerIndex)
 	, m_lives(lives)
 	, m_score(0)
+	, m_spawnPosition(pOwner->GetPosition())
 {
 }
 
@@ -63,4 +65,9 @@ void dae::PlayerComponent::HandleEnemyHit()
 
 	LoseLife();
 	m_invulnerabilityTimer = INVULNERABILITY_DURATION;
+
+	if (GetOwner() != nullptr && m_lives > 0)
+	{
+		GetOwner()->SetLocalPosition(m_spawnPosition);
+	}
 }

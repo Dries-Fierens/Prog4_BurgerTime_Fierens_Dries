@@ -1,4 +1,5 @@
 #include "BurgerIngredientSpriteComponent.h"
+#include "BurgerIngredientComponent.h"
 #include "GameObject.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
@@ -27,17 +28,36 @@ void BurgerIngredientSpriteComponent::Render() const
 		return;
 	}
 
-	const SDL_FRect source = BurgerTimeSprites::GetIngredientFrame(m_type);
+	const auto* pIngredientComponent = GetOwner()->GetComponent<BurgerIngredientComponent>();
+	if (pIngredientComponent == nullptr)
+	{
+		return;
+	}
+
+	const SDL_FRect fullSource = BurgerTimeSprites::GetIngredientFrame(m_type);
 	const glm::vec3 position = GetOwner()->GetPosition();
 
-	const float segmentWidth = m_width / 4.f;
-
-	for (int index{}; index < 4; ++index)
+	const size_t segmentCount = pIngredientComponent->GetSegmentCount();
+	if (segmentCount == 0)
 	{
+		return;
+	}
+
+	const float sourceSegmentWidth = fullSource.w / static_cast<float>(segmentCount);
+	const float destinationSegmentWidth = m_width / static_cast<float>(segmentCount);
+
+	for (size_t index{}; index < segmentCount; ++index)
+	{
+		SDL_FRect source{};
+		source.x = fullSource.x + sourceSegmentWidth * static_cast<float>(index);
+		source.y = fullSource.y;
+		source.w = sourceSegmentWidth;
+		source.h = fullSource.h;
+
 		SDL_FRect destination{};
-		destination.x = position.x + segmentWidth * static_cast<float>(index);
-		destination.y = position.y;
-		destination.w = segmentWidth;
+		destination.x = position.x + destinationSegmentWidth * static_cast<float>(index);
+		destination.y = position.y + (pIngredientComponent->IsSegmentWalked(index) ? m_pressedOffset : 0.f);
+		destination.w = destinationSegmentWidth;
 		destination.h = m_height;
 
 		dae::Renderer::GetInstance().RenderTexture(*m_texture, destination, source);

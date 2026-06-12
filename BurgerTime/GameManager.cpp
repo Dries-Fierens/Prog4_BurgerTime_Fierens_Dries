@@ -27,6 +27,8 @@ void GameManager::OnEvent(const Event& e)
 
 	if (e.name == "PlayerDied" && e.value <= 0)
 	{
+		dae::InputManager::GetInstance().RemoveInputs();
+
 		Locator::Shutdown();
 		Locator::Initialize();
 		HighScoreScene::Create();

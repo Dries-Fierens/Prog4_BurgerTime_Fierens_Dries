@@ -118,7 +118,7 @@ set(GAME_SOURCES
   BurgerTime/EnemyComponent.h
   BurgerTime/EnemyComponent.cpp 
   BurgerTime/Enemy.h 
-  BurgerTime/Enemy.cpp "BurgerTime/BurgerIngredientSpriteComponent.h" "BurgerTime/BurgerIngredientSpriteComponent.cpp")
+  BurgerTime/Enemy.cpp "BurgerTime/BurgerIngredientSpriteComponent.h" "BurgerTime/BurgerIngredientSpriteComponent.cpp" "BurgerTime/EnemySpriteAnimatorComponent.h" "BurgerTime/EnemySpriteAnimatorComponent.cpp")
 
 function(apply_warnings target_name)
   if(MSVC)

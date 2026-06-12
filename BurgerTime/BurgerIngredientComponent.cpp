@@ -183,3 +183,13 @@ bool BurgerIngredientComponent::AreAllSegmentsWalked() const
 			return walkedSegment;
 		});
 }
+
+bool BurgerIngredientComponent::IsSegmentWalked(size_t index) const
+{
+	if (index >= m_walkedSegments.size())
+	{
+		return false;
+	}
+
+	return m_walkedSegments[index];
+}

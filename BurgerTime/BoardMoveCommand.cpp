@@ -15,6 +15,11 @@ BoardMoveCommand::BoardMoveCommand(dae::GameObject* pGameObject, float speed, bo
 
 void BoardMoveCommand::Execute()
 {
+	if (m_pGameObject == nullptr)
+	{
+		return;
+	}
+
 	glm::vec3 proposedPosition = m_pGameObject->GetPosition();
 	const glm::vec3 originalPosition = proposedPosition;
 
@@ -28,13 +33,16 @@ void BoardMoveCommand::Execute()
 	}
 
 	const auto* pBoard = BoardComponent::GetActiveBoard();
-	proposedPosition = pBoard->GetValidatedPosition(originalPosition, proposedPosition,
-		m_actorWidth, m_actorHeight, m_moveHorizontally);
+	if (pBoard != nullptr)
+	{
+		proposedPosition = pBoard->GetValidatedPosition(originalPosition, proposedPosition,
+			m_actorWidth, m_actorHeight, m_moveHorizontally);
+	}
 
 	m_pGameObject->SetLocalPosition(proposedPosition);
 
 	const auto* pCollider = m_pGameObject->GetComponent<dae::ColliderComponent>();
-	if (pCollider->IsOverlapping())
+	if (pCollider != nullptr && pCollider->IsOverlapping())
 	{
 		m_pGameObject->SetLocalPosition(originalPosition);
 	}

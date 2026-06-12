@@ -26,7 +26,8 @@ void PlayerSpriteAnimatorComponent::Update()
 		m_previousPosition = currentPosition;
 		m_isInitialized = true;
 		pSpriteComponent->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-			m_playerIndex, BurgerTimeSprites::Facing::Right, false, 0));
+			m_playerIndex, BurgerTimeSprites::Facing::Left, false, 0));
+		pSpriteComponent->SetFlipHorizontal(false);
 		return;
 	}
 
@@ -56,7 +57,8 @@ void PlayerSpriteAnimatorComponent::Update()
 
 	const int animationFrame = static_cast<int>(m_animationTimer / ANIMATION_FRAME_TIME);
 	pSpriteComponent->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-		m_playerIndex, m_facing, isMoving, animationFrame));
+		m_playerIndex, BurgerTimeSprites::Facing::Left, isMoving, animationFrame));
+	pSpriteComponent->SetFlipHorizontal(m_facing == BurgerTimeSprites::Facing::Right);
 
 	m_previousPosition = currentPosition;
 }

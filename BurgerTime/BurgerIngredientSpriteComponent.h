@@ -22,4 +22,6 @@ private:
 	float m_width{};
 	float m_height{};
 	std::shared_ptr<dae::Texture2D> m_texture{};
+
+	const float m_pressedOffset{ 8.f };
 };

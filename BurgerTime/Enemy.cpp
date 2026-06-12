@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "ColliderComponent.h"
 #include "EnemyComponent.h"
+#include "EnemySpriteAnimatorComponent.h"
 #include "SpriteComponent.h"
 #include "SpriteData.h"
 
@@ -16,6 +17,7 @@ std::unique_ptr<dae::GameObject> Enemy::Create(EnemyType type, float x, float y)
 	sprite->SetSize(EnemyWidth, EnemyHeight);
 	enemyObject->AddComponent(std::move(sprite));
 
+	enemyObject->AddComponent(std::make_unique<EnemySpriteAnimatorComponent>(pEnemy));
 	enemyObject->AddComponent(std::make_unique<EnemyComponent>(type, pEnemy));
 	enemyObject->AddComponent(std::make_unique<dae::ColliderComponent>(EnemyWidth, EnemyHeight, pEnemy));
 

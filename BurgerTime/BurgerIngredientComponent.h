@@ -16,16 +16,20 @@ public:
 	void ForceDrop(int playerIndex);
 
 	bool IsComplete() const { return m_isComplete; }
+	bool IsDropping() const { return m_isDropping; }
+	IngredientType GetType() const { return m_type; }
+	float GetWidth() const { return m_width; }
+
+	size_t GetSegmentCount() const { return m_walkedSegments.size(); }
+	bool IsSegmentWalked(size_t index) const;
 
 private:
 	void UpdateWalkProgress();
 	void UpdateDrop();
 	void ResetWalkProgress();
-	void RefreshDebugText() const;
 	void AwardDropScore() const;
 
 	bool AreAllSegmentsWalked() const;
-	std::string GetShortLabel() const;
 
 	IngredientType m_type{};
 	float m_width{};

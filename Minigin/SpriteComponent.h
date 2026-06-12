@@ -22,6 +22,7 @@ namespace dae
 		void SetTexture(std::shared_ptr<Texture2D> texture);
 		void SetSourceRect(const SDL_FRect& sourceRect);
 		void SetSize(float width, float height);
+		void SetFlipHorizontal(bool flipHorizontal);
 
 		glm::vec2 GetSize() const;
 
@@ -31,5 +32,6 @@ namespace dae
 		bool m_hasSourceRect{};
 		glm::vec2 m_size{};
 		bool m_hasCustomSize{};
+		bool m_flipHorizontal{};
 	};
 }

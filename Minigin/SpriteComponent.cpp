@@ -50,7 +50,7 @@ void dae::SpriteComponent::Render() const
 	destination.w = m_hasCustomSize ? m_size.x : m_sourceRect.w;
 	destination.h = m_hasCustomSize ? m_size.y : m_sourceRect.h;
 
-	Renderer::GetInstance().RenderTexture(*m_texture, destination, m_sourceRect);
+	Renderer::GetInstance().RenderTexture(*m_texture, destination, m_sourceRect, m_flipHorizontal);
 }
 
 void dae::SpriteComponent::SetTexture(const std::string& filename)
@@ -73,6 +73,11 @@ void dae::SpriteComponent::SetSize(float width, float height)
 {
 	m_size = { width, height };
 	m_hasCustomSize = true;
+}
+
+void dae::SpriteComponent::SetFlipHorizontal(bool flipHorizontal)
+{
+	m_flipHorizontal = flipHorizontal;
 }
 
 glm::vec2 dae::SpriteComponent::GetSize() const

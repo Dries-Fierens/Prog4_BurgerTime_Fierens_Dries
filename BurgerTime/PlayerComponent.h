@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include <glm/vec3.hpp>
 
 namespace dae
 {
@@ -25,6 +26,7 @@ namespace dae
 		int m_lives{};
 		int m_score{};
 		float m_invulnerabilityTimer{};
+		glm::vec3 m_spawnPosition{};
 
 		const float INVULNERABILITY_DURATION{ 1.5f };
 	};
