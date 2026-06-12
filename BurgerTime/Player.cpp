@@ -8,15 +8,12 @@
 #include "SpriteComponent.h"
 #include "ColliderComponent.h"
 #include "BoardMoveCommand.h"
-#include "DeathCommand.h"
-#include "AddScoreCommand.h"
 #include "LivesDisplayComponent.h"
 #include "ScoreDisplayComponent.h"
 #include "GameRules.h"
 
 std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float y,
-	SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down,
-	SDL_Keycode dieKey, SDL_Keycode scoreKey)
+	SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down)
 {
 	auto playerObject = std::make_unique<dae::GameObject>();
 	auto* playerPtr = playerObject.get();
@@ -25,12 +22,16 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 
 	auto sprite = std::make_unique<dae::SpriteComponent>("sprites.png", playerPtr);
 	sprite->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-		playerIndex, BurgerTimeSprites::Facing::Right, false, 0));
+		playerIndex, BurgerTimeSprites::Facing::Left, false, 0));
 	sprite->SetSize(PlayerColliderWidth, PlayerColliderHeight);
 	playerObject->AddComponent(std::move(sprite));
 
 	playerObject->AddComponent(std::make_unique<PlayerSpriteAnimatorComponent>(playerIndex, playerPtr));
-	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(playerIndex, BurgerTimeRules::StartingLives, playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(
+		playerIndex,
+		BurgerTimeRules::StartingLives,
+		glm::vec3{ x, y, 0.f },
+		playerPtr));
 	playerObject->AddComponent(std::make_unique<dae::ColliderComponent>(PlayerColliderWidth, PlayerColliderHeight, playerPtr));
 
 	auto& input = dae::InputManager::GetInstance();
@@ -38,9 +39,6 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 	input.AddKeyboardCommand(std::make_unique<BoardMoveCommand>(playerPtr, PlayerMoveSpeed, true, PlayerColliderWidth, PlayerColliderHeight), right, dae::InputManager::InputType::OnPressed);
 	input.AddKeyboardCommand(std::make_unique<BoardMoveCommand>(playerPtr, -PlayerMoveSpeed, false, PlayerColliderWidth, PlayerColliderHeight), up, dae::InputManager::InputType::OnPressed);
 	input.AddKeyboardCommand(std::make_unique<BoardMoveCommand>(playerPtr, PlayerMoveSpeed, false, PlayerColliderWidth, PlayerColliderHeight), down, dae::InputManager::InputType::OnPressed);
-
-	input.AddKeyboardCommand(std::make_unique<DeathCommand>(playerPtr), dieKey, dae::InputManager::InputType::OnDown);
-	input.AddKeyboardCommand(std::make_unique<AddScoreCommand>(playerPtr, ScorePerPickup), scoreKey, dae::InputManager::InputType::OnDown);
 
 	return playerObject;
 }
@@ -55,12 +53,16 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 
 	auto sprite = std::make_unique<dae::SpriteComponent>("sprites.png", playerPtr);
 	sprite->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-		playerIndex, BurgerTimeSprites::Facing::Right, false, 0));
+		playerIndex, BurgerTimeSprites::Facing::Left, false, 0));
 	sprite->SetSize(PlayerColliderWidth, PlayerColliderHeight);
 	playerObject->AddComponent(std::move(sprite));
 
 	playerObject->AddComponent(std::make_unique<PlayerSpriteAnimatorComponent>(playerIndex, playerPtr));
-	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(playerIndex, BurgerTimeRules::StartingLives, playerPtr));
+	playerObject->AddComponent(std::make_unique<dae::PlayerComponent>(
+		playerIndex,
+		BurgerTimeRules::StartingLives,
+		glm::vec3{ x, y, 0.f },
+		playerPtr));
 	playerObject->AddComponent(std::make_unique<dae::ColliderComponent>(PlayerColliderWidth, PlayerColliderHeight, playerPtr));
 
 	auto& input = dae::InputManager::GetInstance();
@@ -72,11 +74,6 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 		dae::Controller::ButtonState::Up, controllerIndex, dae::InputManager::InputType::OnPressed);
 	input.AddControllerCommand(std::make_unique<BoardMoveCommand>(playerPtr, PlayerMoveSpeed, false, PlayerColliderWidth, PlayerColliderHeight),
 		dae::Controller::ButtonState::Down, controllerIndex, dae::InputManager::InputType::OnPressed);
-
-	input.AddControllerCommand(std::make_unique<DeathCommand>(playerPtr),
-		dae::Controller::ButtonState::A, controllerIndex, dae::InputManager::InputType::OnDown);
-	input.AddControllerCommand(std::make_unique<AddScoreCommand>(playerPtr, ScorePerPickup),
-		dae::Controller::ButtonState::B, controllerIndex, dae::InputManager::InputType::OnDown);
 
 	return playerObject;
 }

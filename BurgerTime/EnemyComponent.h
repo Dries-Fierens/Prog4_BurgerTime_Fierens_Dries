@@ -6,7 +6,7 @@
 class EnemyComponent final : public dae::BaseComponent
 {
 public:
-	EnemyComponent(EnemyType type, dae::GameObject* pOwner);
+	EnemyComponent(EnemyType type, const glm::vec3& spawnPosition, dae::GameObject* pOwner);
 
 	void Update() override;
 	void Render() const override;
@@ -22,6 +22,7 @@ private:
 	EnemyType m_type{};
 	float m_speed{};
 	float m_contactTimer{};
+	glm::vec3 m_spawnPosition{};
 
 	const float ENEMY_WIDTH{ 32.f };
 	const float ENEMY_HEIGHT{ 32.f };

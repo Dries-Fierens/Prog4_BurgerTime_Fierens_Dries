@@ -1,5 +1,6 @@
 #include "PlayerSpriteAnimatorComponent.h"
 #include "GameObject.h"
+#include "PlayerComponent.h"
 #include "SpriteData.h"
 #include "SpriteComponent.h"
 #include "Timer.h"
@@ -17,6 +18,17 @@ void PlayerSpriteAnimatorComponent::Update()
 	if (pSpriteComponent == nullptr)
 	{
 		return;
+	}
+
+	auto* pPlayerComponent = GetOwner()->GetComponent<dae::PlayerComponent>();
+	if (pPlayerComponent != nullptr && pPlayerComponent->IsInvulnerable())
+	{
+		const float blinkPhase = std::fmod(pPlayerComponent->GetInvulnerabilityTimer(), 0.16f);
+		pSpriteComponent->SetVisible(blinkPhase < 0.08f);
+	}
+	else
+	{
+		pSpriteComponent->SetVisible(true);
 	}
 
 	const glm::vec3 currentPosition = GetOwner()->GetPosition();

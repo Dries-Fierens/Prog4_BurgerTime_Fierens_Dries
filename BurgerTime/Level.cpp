@@ -145,7 +145,7 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 		}
 
 		const glm::vec2 spawnPosition = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerOne);
-		auto player = Player::Create(1, spawnPosition.x, spawnPosition.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S, SDLK_Q, SDLK_E);
+		auto player = Player::Create(1, spawnPosition.x, spawnPosition.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
 		level.push_back(std::move(player));
 		break;
 	}
@@ -158,7 +158,7 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 		}
 
 		const glm::vec2 playerOneSpawn = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerOne);
-		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S, SDLK_Q, SDLK_E);
+		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
 		level.push_back(std::move(player1));
 
 		auto uiElements2 = Player::CreateUI(infoFont, 2, rightUiX, uiY);
@@ -181,7 +181,7 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 		}
 
 		const glm::vec2 playerOneSpawn = GetPlayerSpawnPosition(levelLayout.playerSpawns.playerOne);
-		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S, SDLK_Q, SDLK_E);
+		auto player1 = Player::Create(1, playerOneSpawn.x, playerOneSpawn.y, SDLK_A, SDLK_D, SDLK_W, SDLK_S);
 		level.push_back(std::move(player1));
 
 		auto uiElements2 = Player::CreateUI(infoFont, 2, rightUiX, uiY);

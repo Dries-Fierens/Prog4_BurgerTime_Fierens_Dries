@@ -9,9 +9,10 @@
 #include <cmath>
 #include <limits>
 
-EnemyComponent::EnemyComponent(EnemyType type, dae::GameObject* pOwner)
+EnemyComponent::EnemyComponent(EnemyType type, const glm::vec3& spawnPosition, dae::GameObject* pOwner)
 	: BaseComponent(pOwner)
 	, m_type(type)
+	, m_spawnPosition(spawnPosition)
 {
 	switch (m_type)
 	{
@@ -151,8 +152,11 @@ void EnemyComponent::Update()
 		pEnemyCollider->IsOverlapping(*pPlayerCollider) &&
 		m_contactTimer <= 0.f)
 	{
-		pTargetPlayerComponent->HandleEnemyHit();
-		m_contactTimer = CONTACT_DAMAGE_COOLDOWN;
+		if (pTargetPlayerComponent->HandleEnemyHit())
+		{
+			GetOwner()->SetLocalPosition(m_spawnPosition);
+			m_contactTimer = CONTACT_DAMAGE_COOLDOWN;
+		}
 	}
 }
 

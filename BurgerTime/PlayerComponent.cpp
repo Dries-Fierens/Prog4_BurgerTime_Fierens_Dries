@@ -3,12 +3,12 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, GameObject* pOwner)
+dae::PlayerComponent::PlayerComponent(int playerIndex, int lives, const glm::vec3& spawnPosition, GameObject* pOwner)
 	: BaseComponent(pOwner)
 	, m_playerIndex(playerIndex)
 	, m_lives(lives)
 	, m_score(0)
-	, m_spawnPosition(pOwner->GetPosition())
+	, m_spawnPosition(spawnPosition)
 {
 }
 
@@ -17,10 +17,18 @@ void dae::PlayerComponent::Update()
 	if (m_invulnerabilityTimer > 0.f)
 	{
 		m_invulnerabilityTimer -= dae::Timer::GetInstance().GetDeltaTime();
-
 		if (m_invulnerabilityTimer < 0.f)
 		{
 			m_invulnerabilityTimer = 0.f;
+		}
+	}
+
+	if (m_deathPauseTimer > 0.f)
+	{
+		m_deathPauseTimer -= dae::Timer::GetInstance().GetDeltaTime();
+		if (m_deathPauseTimer < 0.f)
+		{
+			m_deathPauseTimer = 0.f;
 		}
 	}
 }
@@ -56,18 +64,21 @@ void dae::PlayerComponent::AddScore(int amount)
 	EventQueue::GetInstance().SendEvent(event);
 }
 
-void dae::PlayerComponent::HandleEnemyHit()
+bool dae::PlayerComponent::HandleEnemyHit()
 {
 	if (!CanBeHit())
 	{
-		return;
+		return false;
 	}
 
 	LoseLife();
-	m_invulnerabilityTimer = INVULNERABILITY_DURATION;
 
-	if (GetOwner() != nullptr && m_lives > 0)
+	if (m_lives > 0 && GetOwner() != nullptr)
 	{
 		GetOwner()->SetLocalPosition(m_spawnPosition);
+		m_deathPauseTimer = DEATH_PAUSE_DURATION;
+		m_invulnerabilityTimer = INVULNERABILITY_DURATION;
 	}
+
+	return true;
 }

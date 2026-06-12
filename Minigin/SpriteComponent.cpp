@@ -23,7 +23,7 @@ void dae::SpriteComponent::Update()
 
 void dae::SpriteComponent::Render() const
 {
-	if (m_texture == nullptr)
+	if (m_texture == nullptr || !m_isVisible)
 	{
 		return;
 	}
@@ -78,6 +78,11 @@ void dae::SpriteComponent::SetSize(float width, float height)
 void dae::SpriteComponent::SetFlipHorizontal(bool flipHorizontal)
 {
 	m_flipHorizontal = flipHorizontal;
+}
+
+void dae::SpriteComponent::SetVisible(bool isVisible)
+{
+	m_isVisible = isVisible;
 }
 
 glm::vec2 dae::SpriteComponent::GetSize() const

@@ -72,10 +72,6 @@ set(ENGINE_SOURCES
 )
 
 set(GAME_SOURCES
-  BurgerTime/AddScoreCommand.h
-  BurgerTime/AddScoreCommand.cpp
-  BurgerTime/DeathCommand.h
-  BurgerTime/DeathCommand.cpp
   BurgerTime/GameManager.h
   BurgerTime/GameManager.cpp
   BurgerTime/HighScoreScene.h

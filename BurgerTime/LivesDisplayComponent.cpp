@@ -1,6 +1,7 @@
 #include "LivesDisplayComponent.h"
 #include "TextComponent.h"
 #include <string>
+#include "Locator.h"
 
 dae::LivesDisplayComponent::LivesDisplayComponent(int playerIndex, int initialLives, std::shared_ptr<Font> font, GameObject* pOwner)
 	: BaseComponent(pOwner)
@@ -37,6 +38,7 @@ void dae::LivesDisplayComponent::OnEvent(const Event& event)
 
 	m_lives = event.value;
 	RefreshText();
+	Locator::GetAudio()->PlaySound("Death.wav", 20, 0);
 }
 
 void dae::LivesDisplayComponent::RefreshText() const

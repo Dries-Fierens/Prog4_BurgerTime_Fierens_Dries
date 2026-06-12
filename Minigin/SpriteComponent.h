@@ -23,6 +23,7 @@ namespace dae
 		void SetSourceRect(const SDL_FRect& sourceRect);
 		void SetSize(float width, float height);
 		void SetFlipHorizontal(bool flipHorizontal);
+		void SetVisible(bool isVisible);
 
 		glm::vec2 GetSize() const;
 
@@ -33,5 +34,6 @@ namespace dae
 		glm::vec2 m_size{};
 		bool m_hasCustomSize{};
 		bool m_flipHorizontal{};
+		bool m_isVisible{ true };
 	};
 }

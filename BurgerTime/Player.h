@@ -9,8 +9,7 @@ class Player final
 {
 public:
 	static std::unique_ptr<dae::GameObject> Create(int playerIndex, float x, float y,
-		SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down,
-		SDL_Keycode dieKey, SDL_Keycode scoreKey);
+		SDL_Keycode left, SDL_Keycode right, SDL_Keycode up, SDL_Keycode down);
 
 	static std::unique_ptr<dae::GameObject> Create(int playerIndex, float x, float y,
 		unsigned int controllerIndex);

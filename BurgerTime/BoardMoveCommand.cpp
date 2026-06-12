@@ -1,6 +1,7 @@
 #include "BoardMoveCommand.h"
 #include "BoardComponent.h"
 #include "ColliderComponent.h"
+#include "PlayerComponent.h"
 #include "Timer.h"
 
 BoardMoveCommand::BoardMoveCommand(dae::GameObject* pGameObject, float speed, bool moveHorizontally,
@@ -16,6 +17,12 @@ BoardMoveCommand::BoardMoveCommand(dae::GameObject* pGameObject, float speed, bo
 void BoardMoveCommand::Execute()
 {
 	if (m_pGameObject == nullptr)
+	{
+		return;
+	}
+
+	const auto* pPlayerComponent = m_pGameObject->GetComponent<dae::PlayerComponent>();
+	if (pPlayerComponent != nullptr && !pPlayerComponent->CanMove())
 	{
 		return;
 	}

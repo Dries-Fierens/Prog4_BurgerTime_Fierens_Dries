@@ -18,7 +18,7 @@ std::unique_ptr<dae::GameObject> Enemy::Create(EnemyType type, float x, float y)
 	enemyObject->AddComponent(std::move(sprite));
 
 	enemyObject->AddComponent(std::make_unique<EnemySpriteAnimatorComponent>(pEnemy));
-	enemyObject->AddComponent(std::make_unique<EnemyComponent>(type, pEnemy));
+	enemyObject->AddComponent(std::make_unique<EnemyComponent>(type, glm::vec3{ x, y, 0.f }, pEnemy));
 	enemyObject->AddComponent(std::make_unique<dae::ColliderComponent>(EnemyWidth, EnemyHeight, pEnemy));
 
 	return enemyObject;
