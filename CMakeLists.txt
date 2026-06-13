@@ -43,8 +43,6 @@ set(ENGINE_SOURCES
   Minigin/Locator.cpp
   Minigin/Minigin.h
   Minigin/Minigin.cpp
-  Minigin/MoveCommand.h
-  Minigin/MoveCommand.cpp
   Minigin/NullAudio.h
   Minigin/RenderComponent.h
   Minigin/RenderComponent.cpp
@@ -114,7 +112,7 @@ set(GAME_SOURCES
   BurgerTime/EnemyComponent.h
   BurgerTime/EnemyComponent.cpp 
   BurgerTime/Enemy.h 
-  BurgerTime/Enemy.cpp "BurgerTime/BurgerIngredientSpriteComponent.h" "BurgerTime/BurgerIngredientSpriteComponent.cpp" "BurgerTime/EnemySpriteAnimatorComponent.h" "BurgerTime/EnemySpriteAnimatorComponent.cpp" "BurgerTime/PepperCommand.h" "BurgerTime/PepperCommand.cpp" "BurgerTime/PepperCloudComponent.h" "BurgerTime/PepperCloudComponent.cpp" "BurgerTime/PepperDisplayComponent.h" "BurgerTime/PepperDisplayComponent.cpp" "BurgerTime/ToggleDebugCommand.h" "BurgerTime/ToggleDebugCommand.cpp")
+  BurgerTime/Enemy.cpp "BurgerTime/BurgerIngredientSpriteComponent.h" "BurgerTime/BurgerIngredientSpriteComponent.cpp" "BurgerTime/EnemySpriteAnimatorComponent.h" "BurgerTime/EnemySpriteAnimatorComponent.cpp" "BurgerTime/PepperCommand.h" "BurgerTime/PepperCommand.cpp" "BurgerTime/PepperCloudComponent.h" "BurgerTime/PepperCloudComponent.cpp" "BurgerTime/PepperDisplayComponent.h" "BurgerTime/PepperDisplayComponent.cpp" "BurgerTime/ToggleDebugCommand.h" "BurgerTime/ToggleDebugCommand.cpp"  "BurgerTime/MainMenuCommand.h" "BurgerTime/MainMenuCommand.cpp")
 
 function(apply_warnings target_name)
   if(MSVC)

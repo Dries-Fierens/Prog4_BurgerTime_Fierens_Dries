@@ -20,7 +20,6 @@ private:
 	int m_playerIndex{};
 	glm::vec3 m_previousPosition{};
 	float m_animationTimer{};
-	bool m_isInitialized{};
 	BurgerTimeSprites::Facing m_facing{ BurgerTimeSprites::Facing::Right };
 
 	const float MOVE_EPSILON{ 0.01f };

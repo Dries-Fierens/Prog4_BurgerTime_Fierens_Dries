@@ -6,10 +6,16 @@
 #include "GameManager.h"
 #include "Renderer.h"
 #include <string>
+#include "MainMenuCommand.h"
+#include "InputManager.h"
 
 void HighScoreScene::Create()
 {
 	dae::Scene* currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+
+	dae::InputManager::GetInstance().RemoveInputs();
+	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<MainMenuCommand>(), SDLK_SPACE, dae::InputManager::InputType::OnDown);
+
 	if (currentScene)
 	{
 		currentScene->RemoveAll();
@@ -48,4 +54,12 @@ void HighScoreScene::Create()
 		scoreObject->AddComponent(std::move(scoreText));
 		currentScene->Add(std::move(scoreObject));
 	}
+
+	auto mainMenu = std::make_unique<dae::GameObject>();
+	auto mainMenuText = std::make_unique<dae::TextComponent>("PRESS SPACE TO CONTINUE", fontNES, mainMenu.get());
+	mainMenuText->Update();
+	auto mainMenuSize = mainMenuText->GetSize();
+	mainMenu->SetLocalPosition(windowSize.x / 2 - mainMenuSize.x / 2, 550.f);
+	mainMenu->AddComponent(std::move(mainMenuText));
+	currentScene->Add(std::move(mainMenu));
 }

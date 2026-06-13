@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <sstream>
 
+// Function for calculating the Y positions where a burger part should stop when dropped, based on the platforms and the final plate position in the stack.
 std::vector<float> Level::GetDropStops(const BurgerPartData& burgerPart,
 	const BurgerStackData& burgerStack,
 	const std::vector<PlatformData>& platforms,
