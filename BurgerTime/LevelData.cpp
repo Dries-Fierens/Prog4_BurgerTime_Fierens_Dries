@@ -20,7 +20,7 @@ static LevelLayout CreateLevelThree()
 		{
 			{ 248.f, 522.f },
 			{ 336.f, 522.f },
-			{ 288.f, 42.f }
+			{ 336.f, 522.f },
 		},
 		{
 			{ { 0.f, 42.f }, 624.f },
@@ -119,7 +119,7 @@ static LevelLayout CreateLevelTwo()
 		{
 			{ 288.f, 426.f },
 			{ 336.f, 426.f },
-			{ 288.f, 42.f }
+			{ 336.f, 426.f },
 		},
 		{
 			{ { 0.f, 42.f }, 624.f },
@@ -195,7 +195,7 @@ static LevelLayout CreateLevelOne()
 		{
 			{ 48.f, 472.f },
 			{ 240.f, 472.f },
-			{ 456.f, 106.f }
+			{ 240.f, 472.f },
 		},
 		{
 			{ { 0.f, 42.f }, 624.f },
