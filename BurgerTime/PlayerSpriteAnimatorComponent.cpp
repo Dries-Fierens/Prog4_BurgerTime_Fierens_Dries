@@ -64,7 +64,7 @@ void PlayerSpriteAnimatorComponent::Update()
 
 	const int animationFrame = static_cast<int>(m_animationTimer / ANIMATION_FRAME_TIME);
 	pSpriteComponent->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-		m_playerIndex, BurgerTimeSprites::Facing::Left, isMoving, animationFrame));
+		m_playerIndex, isMoving, animationFrame));
 	pSpriteComponent->SetFlipHorizontal(m_facing == BurgerTimeSprites::Facing::Right);
 
 	m_previousPosition = currentPosition;

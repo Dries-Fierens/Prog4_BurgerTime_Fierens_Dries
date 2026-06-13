@@ -40,7 +40,7 @@ static LevelLayout CreateLevelThree()
 			{ { 144.f, 569.f }, 335.f }
 		},
 		{
-			{ { 24.f, 42.f }, 192 },
+			{ { 24.f, 42.f }, 192.f },
 			{ { 144.f, 42.f }, 480.f },
 			{ { 216.f, 42.f }, 64.f },
 			{ { 312.f, 42.f }, 256.f },
@@ -147,7 +147,7 @@ static LevelLayout CreateLevelTwo()
 		{
 			{ EnemyType::HotDog, { 220.f, 42.f } },
 			{ EnemyType::Pickle, { 432.f, 42.f } },
-			//{ EnemyType::Egg, { 336.f, 42.f } }
+			{ EnemyType::Egg, { 336.f, 42.f } }
 		}
 	};
 }
@@ -193,23 +193,23 @@ static LevelLayout CreateLevelOne()
 				{
 					{ IngredientType::TopBun, { 48.f, 108.f }, 100.f },
 					{ IngredientType::Lettuce, { 48.f, 207.f }, 100.f },
-					{ IngredientType::Patty, { 48.f, 345.f }, 100.f },
+					{ IngredientType::Patty, { 48.f, 350.f }, 100.f },
 					{ IngredientType::BottomBun, { 48.f, 450.f }, 100.f }
 				}),
 			MakeBurgerStack(
 				{ 192.f, 560.f },
 				{
 					{ IngredientType::TopBun, { 192.f, 22.f }, 100.f },
-					{ IngredientType::Lettuce, { 192.f, 247.f }, 100.f },
-					{ IngredientType::Patty, { 192.f, 345.f }, 100.f },
+					{ IngredientType::Lettuce, { 192.f, 250.f }, 100.f },
+					{ IngredientType::Patty, { 192.f, 350.f }, 100.f },
 					{ IngredientType::BottomBun, { 192.f, 450.f }, 100.f }
 				}),
 			MakeBurgerStack(
 				{ 340.f, 560.f },
 				{
 					{ IngredientType::TopBun, { 340.f, 22.f }, 100.f },
-					{ IngredientType::Lettuce, { 340.f, 247.f }, 100.f },
-					{ IngredientType::Patty, { 340.f, 345.f }, 100.f },
+					{ IngredientType::Lettuce, { 340.f, 250.f }, 100.f },
+					{ IngredientType::Patty, { 340.f, 350.f }, 100.f },
 					{ IngredientType::BottomBun, { 340.f, 450.f }, 100.f }
 				}),
 			MakeBurgerStack(

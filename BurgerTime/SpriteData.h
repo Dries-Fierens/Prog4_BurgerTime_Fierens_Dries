@@ -12,60 +12,47 @@ namespace BurgerTimeSprites
 
 	inline constexpr float CellSize{ 16.f };
 
-	constexpr SDL_FRect MakeRect(int column, int row, int widthInCells = 1, int heightInCells = 1)
+	constexpr SDL_FRect MakeRect(float column, float row, float widthInCells = 1, float heightInCells = 1)
 	{
 		return SDL_FRect
 		{
-			static_cast<float>(column) * CellSize,
-			static_cast<float>(row) * CellSize,
-			static_cast<float>(widthInCells) * CellSize,
-			static_cast<float>(heightInCells) * CellSize
+			column * CellSize,
+			row * CellSize,
+			widthInCells * CellSize,
+			heightInCells * CellSize
 		};
 	}
 
-	inline constexpr SDL_FRect PeterIdleRight{ MakeRect(5, 0) };
-	inline constexpr SDL_FRect PeterWalkRight{ MakeRect(6, 0) };
-	inline constexpr SDL_FRect PeterIdleLeft{ MakeRect(5, 0) };
-	inline constexpr SDL_FRect PeterWalkLeft{ MakeRect(6, 0) };
+	inline constexpr SDL_FRect PeterIdle{ MakeRect(5, 0) };
+	inline constexpr SDL_FRect PeterWalk{ MakeRect(6, 0) };
 
-	inline constexpr SDL_FRect SaltIdleRight{ MakeRect(5, 0) };
-	inline constexpr SDL_FRect SaltWalkRight{ MakeRect(6, 0) };
-	inline constexpr SDL_FRect SaltIdleLeft{ MakeRect(5, 0) };
-	inline constexpr SDL_FRect SaltWalkLeft{ MakeRect(6, 0) };
+	inline constexpr SDL_FRect SaltIdle{ MakeRect(5, 0) };
+	inline constexpr SDL_FRect SaltWalk{ MakeRect(6, 0) };
 
 	inline constexpr SDL_FRect HotDogIdle{ MakeRect(0, 3) };
 	inline constexpr SDL_FRect PickleIdle{ MakeRect(0, 5) };
 	inline constexpr SDL_FRect EggIdle{ MakeRect(0, 7) };
 
-	inline constexpr SDL_FRect TopBun{ MakeRect(8, 0, 4, 1) };
-	inline constexpr SDL_FRect BottomBun{ MakeRect(8, 1, 4, 1) };
-	inline constexpr SDL_FRect Patty{ MakeRect(8, 2, 4, 1) };
-	inline constexpr SDL_FRect Cheese{ MakeRect(8, 3, 4, 1) };
-	inline constexpr SDL_FRect Lettuce{ MakeRect(8, 4, 4, 1) };
-	inline constexpr SDL_FRect Tomato{ MakeRect(8, 5, 4, 1) };
+	// Ingredients are half a cell high
+	inline constexpr SDL_FRect TopBun{ MakeRect(7, 3, 2, 0.5f) };
+	inline constexpr SDL_FRect BottomBun{ MakeRect(7, 3.5f, 2, 0.5f) };
+	inline constexpr SDL_FRect Cheese{ MakeRect(7, 4, 2, 0.5f) };
+	inline constexpr SDL_FRect Patty{ MakeRect(7, 4.5f, 2, 0.5f) };
+	inline constexpr SDL_FRect Tomato{ MakeRect(7, 5, 2, 0.5f) };
+	inline constexpr SDL_FRect Lettuce{ MakeRect(7, 5.5f, 2, 0.5f) };
 
-	inline constexpr SDL_FRect PepperCloud{ MakeRect(12, 0, 3, 2) };
+	inline constexpr SDL_FRect PepperCloud{ MakeRect(12, 2, 4, 2) };
 
-	inline SDL_FRect GetPlayerFrame(int playerIndex, Facing facing, bool isMoving, int animationFrame)
+	inline SDL_FRect GetPlayerFrame(int playerIndex, bool isMoving, int animationFrame)
 	{
 		const bool useWalkFrame = isMoving && (animationFrame % 2 == 1);
 
 		if (playerIndex == 2)
 		{
-			if (facing == Facing::Left)
-			{
-				return useWalkFrame ? SaltWalkLeft : SaltIdleLeft;
-			}
-
-			return useWalkFrame ? SaltWalkRight : SaltIdleRight;
+			return useWalkFrame ? SaltWalk : SaltIdle;
 		}
 
-		if (facing == Facing::Left)
-		{
-			return useWalkFrame ? PeterWalkLeft : PeterIdleLeft;
-		}
-
-		return useWalkFrame ? PeterWalkRight : PeterIdleRight;
+		return useWalkFrame ? PeterWalk : PeterIdle;
 	}
 
 	inline SDL_FRect GetEnemyFrame(EnemyType type)

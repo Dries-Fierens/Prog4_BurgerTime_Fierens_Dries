@@ -24,7 +24,7 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 
 	auto sprite = std::make_unique<dae::SpriteComponent>("sprites.png", playerPtr);
 	sprite->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-		playerIndex, BurgerTimeSprites::Facing::Left, false, 0));
+		playerIndex, false, 0));
 	sprite->SetSize(PlayerColliderWidth, PlayerColliderHeight);
 	playerObject->AddComponent(std::move(sprite));
 
@@ -58,7 +58,7 @@ std::unique_ptr<dae::GameObject> Player::Create(int playerIndex, float x, float 
 
 	auto sprite = std::make_unique<dae::SpriteComponent>("sprites.png", playerPtr);
 	sprite->SetSourceRect(BurgerTimeSprites::GetPlayerFrame(
-		playerIndex, BurgerTimeSprites::Facing::Left, false, 0));
+		playerIndex, false, 0));
 	sprite->SetSize(PlayerColliderWidth, PlayerColliderHeight);
 	playerObject->AddComponent(std::move(sprite));
 

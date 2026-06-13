@@ -19,7 +19,9 @@
 
 std::vector<float> Level::GetDropStops(const BurgerPartData& burgerPart,
 	const BurgerStackData& burgerStack,
-	const std::vector<PlatformData>& platforms)
+	const std::vector<PlatformData>& platforms,
+	size_t stackIndex,
+	size_t stackSize)
 {
 	std::vector<float> dropStops{};
 	const float ingredientCenterX = burgerPart.position.x + burgerPart.width * 0.5f;
@@ -40,7 +42,9 @@ std::vector<float> Level::GetDropStops(const BurgerPartData& burgerPart,
 		}
 	}
 
-	dropStops.push_back(burgerStack.platePosition.y);
+	const size_t layersFromBottom = stackSize - 1 - stackIndex;
+	const float finalPlateY = burgerStack.platePosition.y - IngredientHeight * static_cast<float>(layersFromBottom);
+	dropStops.push_back(finalPlateY);
 
 	std::sort(dropStops.begin(), dropStops.end());
 	dropStops.erase(std::unique(dropStops.begin(), dropStops.end()), dropStops.end());
@@ -108,8 +112,10 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 
 		std::vector<BurgerIngredientComponent*> stackIngredients{};
 
-		for (const auto& part : sortedParts)
+		for (size_t index{}; index < sortedParts.size(); ++index)
 		{
+			const auto& part = sortedParts[index];
+
 			auto ingredientObject = std::make_unique<dae::GameObject>();
 
 			ingredientObject->AddComponent(std::make_unique<BurgerIngredientSpriteComponent>(
@@ -118,7 +124,7 @@ std::vector<std::unique_ptr<dae::GameObject>> Level::Create(int levelNumber)
 			auto* ingredient = ingredientObject->AddComponent(std::make_unique<BurgerIngredientComponent>(
 				part.type,
 				part.width,
-				GetDropStops(part, burgerStack, levelLayout.platforms),
+				GetDropStops(part, burgerStack, levelLayout.platforms, index, sortedParts.size()),
 				ingredientObject.get()));
 
 			ingredientObject->SetLocalPosition(part.position.x, part.position.y);
