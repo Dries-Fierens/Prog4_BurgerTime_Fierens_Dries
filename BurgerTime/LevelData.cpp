@@ -18,9 +18,9 @@ static LevelLayout CreateLevelThree()
 	{
 		3,
 		{
-			{ 48.f, 458.f },
-			{ 240.f, 458.f },
-			{ 456.f, 106.f }
+			{ 248.f, 522.f },
+			{ 336.f, 522.f },
+			{ 288.f, 42.f }
 		},
 		{
 			{ { 0.f, 42.f }, 624.f },
@@ -28,50 +28,85 @@ static LevelLayout CreateLevelThree()
 			{ { 0.f, 138.f }, 335.f },
 			{ { 432.f, 138.f }, 192.f },
 			{ { 0.f, 185.f }, 624.f },
-			{ { 288.f, 234.f }, 192.f },
-			{ { 144.f, 282.f }, 335.f },
+			{ { 308.f, 234.f }, 162.f },
+			{ { 154.f, 282.f }, 305.f },
 			{ { 0.f, 378.f }, 192.f },
 			{ { 430.f, 378.f }, 192.f },
 			{ { 0.f, 424.f }, 192.f },
 			{ { 430.f, 424.f }, 192.f },
 			{ { 0.f, 473.f }, 192.f },
 			{ { 430.f, 473.f }, 192.f },
-			{ { 144.f, 522.f }, 335.f },
-			{ { 144.f, 569.f }, 335.f }
+			{ { 154.f, 522.f }, 305.f },
+			{ { 154.f, 569.f }, 305.f }
 		},
 		{
-			{ { 24.f, 42.f }, 192.f },
-			{ { 144.f, 42.f }, 480.f },
-			{ { 216.f, 42.f }, 64.f },
-			{ { 312.f, 42.f }, 256.f },
-			{ { 312.f, 458.f }, 64.f },
-			{ { 384.f, 170.f }, 64.f },
-			{ { 456.f, 42.f }, 480.f },
-			{ { 72.f, 394.f }, 64.f },
-			{ { 552.f, 42.f }, 128.f },
-			{ { 552.f, 394.f }, 64.f }
+			{ { 24.f, 42.f }, 148.f },
+			{ { 24.f, 382.f }, 90.f },
+			{ { 96.f, 382.f }, 90.f },
+			{ { 168.f, 42.f }, 100.f },
+			{ { 168.f, 190.f }, 380.f },
+			{ { 240.f, 42.f }, 50.f },
+			{ { 240.f, 142.f }, 140.f },
+			{ { 240.f, 518.f }, 50.f },
+			{ { 312.f, 92.f }, 190.f },
+			{ { 312.f, 518.f }, 50.f },
+			{ { 384.f, 42.f }, 50.f },
+			{ { 384.f, 182.f }, 50.f },
+			{ { 384.f, 518.f }, 50.f },
+			{ { 456.f, 92.f }, 90.f },
+			{ { 456.f, 232.f }, 350.f },
+			{ { 600.f, 42.f }, 148.f },
+			{ { 600.f, 382.f }, 90.f },
+			{ { 528.f, 422.f }, 50.f }
 		},
 		{
 			MakeBurgerStack(
-				{ 72.f, 560.f },
+				{ 48.f, 265.f },
 				{
-					{ IngredientType::TopBun, { 72.f, 74.f }, 72.f },
-					{ IngredientType::Patty, { 72.f, 202.f }, 72.f },
-					{ IngredientType::Lettuce, { 72.f, 362.f }, 72.f },
-					{ IngredientType::BottomBun, { 72.f, 490.f }, 72.f }
+					{ IngredientType::TopBun, { 48.f, 22.f }, 100.f },
+					{ IngredientType::Tomato, { 48.f, 65.f }, 100.f },
+					{ IngredientType::BottomBun, { 48.f, 160.f }, 100.f }
 				}),
 			MakeBurgerStack(
-				{ 408.f, 560.f },
+				{ 480.f, 265.f },
 				{
-					{ IngredientType::TopBun, { 408.f, 74.f }, 72.f },
-					{ IngredientType::Cheese, { 408.f, 202.f }, 72.f },
-					{ IngredientType::Patty, { 408.f, 362.f }, 72.f },
-					{ IngredientType::BottomBun, { 408.f, 490.f }, 72.f }
+					{ IngredientType::TopBun, { 480.f, 22.f }, 100.f },
+					{ IngredientType::Cheese, { 480.f, 65.f }, 100.f },
+					{ IngredientType::BottomBun, { 480.f, 160.f }, 100.f }
+				}),
+			MakeBurgerStack(
+				{ 190.f, 425.f },
+				{
+					{ IngredientType::TopBun, { 190.f, 22.f }, 100.f },
+					{ IngredientType::Patty, { 190.f, 65.f }, 100.f },
+					{ IngredientType::BottomBun, { 190.f, 255.f }, 100.f }
+				}),
+			MakeBurgerStack(
+				{ 334.f, 425.f },
+				{
+					{ IngredientType::TopBun, { 334.f, 22.f }, 100.f },
+					{ IngredientType::Tomato, { 334.f, 65.f }, 100.f },
+					{ IngredientType::BottomBun, { 334.f, 160.f }, 100.f }
+				}),
+			MakeBurgerStack(
+				{ 48.f, 560.f },
+				{
+					{ IngredientType::TopBun, { 48.f, 362.f }, 100.f },
+					{ IngredientType::Lettuce, { 48.f,  400.f }, 100.f },
+					{ IngredientType::BottomBun, { 48.f, 445.f }, 100.f }
+				}),
+			MakeBurgerStack(
+				{ 480.f, 560.f },
+				{
+					{ IngredientType::TopBun, { 480.f, 362.f }, 100.f },
+					{ IngredientType::Patty, { 480.f, 400.f }, 100.f },
+					{ IngredientType::BottomBun, { 480.f, 445.f }, 100.f }
 				})
 		},
 		{
-			{ EnemyType::HotDog, { 240.f, 106.f } },
-			{ EnemyType::Pickle, { 408.f, 234.f } }
+			{ EnemyType::HotDog, { 240.f, 42.f } },
+			{ EnemyType::Pickle, { 408.f, 234.f } },
+			{ EnemyType::Egg, { 408.f, 42.f } }
 		}
 	};
 }

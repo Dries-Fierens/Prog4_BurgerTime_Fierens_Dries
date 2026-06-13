@@ -38,7 +38,7 @@ void dae::LivesDisplayComponent::OnEvent(const Event& event)
 
 	m_lives = event.value;
 	RefreshText();
-	Locator::GetAudio()->PlaySound("Death.wav", 20, 0);
+	Locator::GetAudio()->PlaySound("Death.wav", 10, 0);
 }
 
 void dae::LivesDisplayComponent::RefreshText() const

@@ -26,6 +26,10 @@ std::vector<float> Level::GetDropStops(const BurgerPartData& burgerPart,
 	std::vector<float> dropStops{};
 	const float ingredientCenterX = burgerPart.position.x + burgerPart.width * 0.5f;
 
+	const size_t layersFromBottom = stackSize - 1 - stackIndex;
+	const float plateStackOffset{ 32.f };
+	const float finalPlateY = burgerStack.platePosition.y + plateStackOffset - IngredientHeight * static_cast<float>(layersFromBottom + 1);
+	
 	for (const auto& platform : platforms)
 	{
 		if (platform.position.y <= burgerPart.position.y + IngredientHeight)
@@ -36,14 +40,19 @@ std::vector<float> Level::GetDropStops(const BurgerPartData& burgerPart,
 		const float left = platform.position.x;
 		const float right = platform.position.x + platform.width;
 
-		if (ingredientCenterX >= left && ingredientCenterX <= right)
+		if (ingredientCenterX < left || ingredientCenterX > right)
 		{
-			dropStops.push_back(platform.position.y - IngredientHeight);
+			continue;
+		}
+
+		const float platformStopY = platform.position.y - IngredientHeight;
+
+		if (platformStopY < finalPlateY)
+		{
+			dropStops.push_back(platformStopY);
 		}
 	}
 
-	const size_t layersFromBottom = stackSize - 1 - stackIndex;
-	const float finalPlateY = burgerStack.platePosition.y - IngredientHeight * static_cast<float>(layersFromBottom);
 	dropStops.push_back(finalPlateY);
 
 	std::sort(dropStops.begin(), dropStops.end());
