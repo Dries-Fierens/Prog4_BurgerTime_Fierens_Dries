@@ -10,6 +10,7 @@
 #include "PlayerComponent.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "ToggleDebugCommand.h"
 
 void GameManager::OnEvent(const Event& e)
 {
@@ -100,6 +101,8 @@ void GameManager::SetLevel()
 	dae::InputManager::GetInstance().RemoveInputs();
 	dae::InputManager::GetInstance().AddKeyboardCommand(
 		std::make_unique<MuteCommand>(), SDLK_F2, dae::InputManager::InputType::OnDown);
+	dae::InputManager::GetInstance().AddKeyboardCommand(
+		std::make_unique<ToggleDebugCommand>(), SDLK_F3, dae::InputManager::InputType::OnDown);
 
 	currentScene->RemoveAll();
 	currentScene->SetName("Level " + std::to_string(m_currentLevel));

@@ -6,6 +6,7 @@
 
 // non-owning reference to the currently active BoardComponent
 const BoardComponent* BoardComponent::m_pActiveBoard{ nullptr };
+bool BoardComponent::m_isDebugRenderingEnabled{ false };
 
 BoardComponent::BoardComponent(std::vector<PlatformData> platforms, std::vector<LadderData> ladders, dae::GameObject* pOwner)
 	: BaseComponent(pOwner)
@@ -29,6 +30,11 @@ void BoardComponent::Update()
 
 void BoardComponent::Render() const
 {
+	if (!m_isDebugRenderingEnabled)
+	{
+		return;
+	}
+
 	auto* pRenderer = dae::Renderer::GetInstance().GetSDLRenderer();
 	if (pRenderer == nullptr)
 	{
@@ -160,6 +166,11 @@ bool BoardComponent::TryGetBestLadderX(const glm::vec3& currentPosition, const g
 const BoardComponent* BoardComponent::GetActiveBoard()
 {
 	return m_pActiveBoard;
+}
+
+void BoardComponent::ToggleDebugRendering()
+{
+	m_isDebugRenderingEnabled = !m_isDebugRenderingEnabled;
 }
 
 bool BoardComponent::TryGetStandingPlatformY(const glm::vec3& position, float actorWidth, float actorHeight, float& platformY) const

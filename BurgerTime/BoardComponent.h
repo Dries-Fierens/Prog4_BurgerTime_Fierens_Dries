@@ -20,6 +20,7 @@ public:
 		float actorWidth, float actorHeight, float& ladderX) const;
 
 	static const BoardComponent* GetActiveBoard();
+	static void ToggleDebugRendering();
 
 private:
 	bool TryGetStandingPlatformY(const glm::vec3& position, float actorWidth, float actorHeight, float& platformY) const;
@@ -31,6 +32,7 @@ private:
 	std::vector<LadderData> m_ladders{};
 
 	static const BoardComponent* m_pActiveBoard;
+	static bool m_isDebugRenderingEnabled;
 
 	const float PLATFORM_TOLERANCE{ 10.f };
 	const float LADDER_SNAP_TOLERANCE{ 15.f };

@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "Locator.h"
 #include "MuteCommand.h"
+#include "ToggleDebugCommand.h"
 
 void StartVersusCommand::Execute()
 {
@@ -13,6 +14,7 @@ void StartVersusCommand::Execute()
 
 	dae::InputManager::GetInstance().RemoveInputs();
 	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<MuteCommand>(), SDLK_F2, dae::InputManager::InputType::OnDown);
+	dae::InputManager::GetInstance().AddKeyboardCommand(std::make_unique<ToggleDebugCommand>(), SDLK_F3, dae::InputManager::InputType::OnDown);
 
 	currentScene->RemoveAll();
 	currentScene->SetName("Level 1");
